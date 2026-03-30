@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBU - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Lato', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .left {
+      width: 50%;
+      background: #4B4EFC;
+      color: white;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100vh;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+
+    .right {
+      width: 50%;
+      background: #FFFFFF;
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      padding: 40px;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .right-text {
+      color: #4B4EFC;
+      font-size: 18px;
+      font-weight: 600;
+      position: absolute;
+      bottom: 25px;
+      right: 40px;
+    }
+
+    .circle {
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      background: #EAEAF0;
+      border-radius: 50%;
+      bottom: 50%;
+      transform: translateY(50%);
+      right: -220px;
+      z-index: 1;
+    }
+
+    .login-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #FFFFFF;
+      padding: 60px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+      width: 500px;
+      border: 1px solid #EAEAF0;
+      z-index: 3;
+      max-width: 90%;
+    }
+
+    .login-card h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1A1A2E;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .divider {
+      height: 1px;
+      background: #EAEAF0;
+      margin-bottom: 30px;
+      width: 70%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 16px 45px 16px 16px;
+      border-radius: 10px;
+      border: 1px solid #DADAE5;
+      outline: none;
+      font-size: 14px;
+      background: #FFFFFF;
+    }
+
+    .input-group span {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #B0B0B8;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4B4EFC, #5A5DFD);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(75,78,252,0.3);
+    }
+
+    .error {
+      color: #E53935;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="left">
+    <div class="logo">
+      <img src="logo.png" alt="IBU Logo" />
+      <span class="logo-text">Inventario de Bienes de Uso</span>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="circle"></div>
+    <div class="right-text">Activos Fijos</div>
+  </div>
+
+  <div class="login-card">
+    <h2>Iniciar Sesión</h2>
+    <div class="divider"></div>
+
+    <div class="error" id="error">Completar todos los campos</div>
+
+    <div class="input-group">
+      <input type="text" id="usuario" placeholder="Usuario" />
+      <span>👤</span>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Contraseña" />
+      <span>🔒</span>
+    </div>
+
+    <button class="btn" onclick="login()">Ingresar</button>
+  </div>
+
+  <script>
+    function login() {
+      const usuario = document.getElementById('usuario').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const error = document.getElementById('error');
+
+      if (!usuario || !password) {
+        error.style.display = 'block';
+        return;
+      }
+
+      error.style.display = 'none';
+
+      const userData = {
+        nombre: 'Bruno Carabajal',
+        rol: 'Analista',
+        legajo: '700'
+      };
+
+      localStorage.setItem('ibu_user', JSON.stringify(userData));
+
+      // Redireccion a Dashboard
+     window.location.href = "dashboard.html";;
+    }
+  </script>
+</body>
+</html>
