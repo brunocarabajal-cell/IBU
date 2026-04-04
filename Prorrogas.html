@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBU - Prórrogas</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="navbar.css">
+<style>
+/* Footer styles moved inside style tag */
+.footer-line{
+  height:40px;
+  background:#303D9F;
+  width:100%;
+  position:fixed;
+  bottom:0;
+  left:0;
+  z-index:999;
+}
+
+body{
+  padding-bottom:50px;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
+body{background:#F4F4F8;color:#1A1A2E}
+
+/* TOP */
+.top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding-bottom:60px}
+
+/* CARD */
+.card{background:#fff;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+.title{color:#4B4EFC;font-weight:700}
+.line{height:2px;background:#4B4EFC;margin:12px 0 20px}
+
+.form{display:flex;gap:15px;align-items:end}
+.form div{display:flex;flex-direction:column;font-size:12px}
+.form input,.form select{padding:10px;border:1px solid #DADAE5;border-radius:10px}
+.btn{background:#2C3E6B;color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer}
+.btn-green{background:#43A047}
+
+/* TABLE */
+.table-card{background:#DCDDE6;margin:30px;border-radius:16px;padding:24px}
+table{width:100%;border-collapse:collapse}
+th{
+  color:#4B4EFC;
+  font-size:13px;
+  text-align:left;
+  padding:14px;
+  border-bottom:2px solid #4B4EFC;
+}
+td{
+  padding:14px;
+  border-top:1px solid #E6E6EF;
+  font-size:13px;
+}
+.action{background:#2C3E6B;color:#fff;border:none;padding:6px 14px;border-radius:8px}
+
+/* MODAL */
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;justify-content:center;align-items:center}
+.modal-content{
+  background:#fff;
+  width:75%;
+  border-radius:16px;
+  padding:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+.modal-header{display:flex;justify-content:space-between;margin-bottom:25px;padding-bottom:10px;border-bottom:1px solid #E6E6EF}
+.status-green{color:#43A047}
+.status-red{color:#E53935}
+.status-gray{color:#888}
+
+/* New input-gray class */
+.input-gray{
+  width:100%;
+  background:#E6E6EF;
+  border:none;
+  border-radius:8px;
+  padding:8px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="top">
+<div id="navbar-container"></div>
+
+<div class="card">
+<div class="title">Propuesta de Prórroga</div>
+<div class="line"></div>
+<div class="form">
+<div>
+<label>Nº Inventario</label>
+<input id="inv">
+</div>
+<div>
+<label>Motivo</label>
+<select id="motivo">
+<option>Planificación Erronea</option>
+<option>Faltante de Personal</option>
+<option>Complejidad de Análisis</option>
+<option>Complejidad de Conteo</option>
+</select>
+</div>
+<div>
+<label>Fecha Límite de Prórroga</label>
+<input type="date" id="fecha">
+</div>
+<button class="btn" onclick="agregar()">Aceptar</button>
+<button class="btn btn-green">📊</button>
+</div>
+</div>
+</div>
+
+<div class="table-card">
+<table id="tabla">
+<thead>
+<tr>
+<th>Nº</th><th>Fecha</th><th>Fecha Prórroga</th><th>Descripción</th><th>Tipo</th><th>Ubicación</th><th>Motivo</th><th>Solicitante</th><th>Estado</th><th>Acción</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div style="font-size:20px;font-weight:700;color:#4B4EFC;margin-bottom:18px;">Detalle Prórroga</div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div style="display:flex;gap:30px;font-size:14px;">
+        <div><b style="color:#4B4EFC">Fecha</b> 20/11/2025</div>
+        <div><b style="color:#4B4EFC">N° Inventario</b> 1</div>
+        <div><b style="color:#4B4EFC">Descripción</b> Inv. General Noviembre</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button style="background:#E6E6EF;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;">Cancelar Solicitud</button>
+        <span onclick="cerrar()" style="cursor:pointer;font-weight:bold;">X</span>
+      </div>
+    </div>
+
+    <div style="background:#F4F4F8;border-radius:14px;padding:20px;">
+      <table>
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Participantes</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Solicitante</td>
+            <td>Planificación Erronea</td>
+            <td class="status-green">Aprobada</td>
+            <td><input class="input-gray"></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Gerencia</td>
+            <td>Planificación Erronea</td>
+            <td class="status-green">Aprobada</td>
+            <td><input class="input-gray" value="Se dejó el inventario para el último día"></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Activos Fijos</td>
+            <td>Planificación Erronea</td>
+            <td class="status-green">Aprobada</td>
+            <td><input class="input-gray" value="Fecha solicitada muy extensa, se otorga plazo hasta el 10/10/2028"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-top:25px;">
+      <button onclick="aprobar()" style="background:#4B4EFC;color:#fff;border:none;padding:10px 32px;border-radius:12px;font-weight:500;cursor:pointer;">Aprobar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function goInicio(){window.location.href="dashboard.html"}
+function goInventario(){window.location.href="inventario.html"}
+function goReportes(){window.location.href="reportes.html"}
+function goUsuarios(){window.location.href="usuarios.html"}
+function goProrrogas(){window.location.href="Prorrogas.html"}
+const data=[
+{n:1,fecha:'20/11/2025',pr:20,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'007',motivo:'Planificación Erronea',sol:'146685',estado:'Pendiente Gcia'},
+{n:65,fecha:'21/11/2025',pr:1,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'007',motivo:'Faltante de Personal',sol:'147585',estado:'Pendiente Gcia'},
+{n:4,fecha:'20/11/2025',pr:2,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'131',motivo:'Complejidad de Análisis',sol:'1458712',estado:'Pendiente AAFF'},
+{n:87,fecha:'20/11/1996',pr:56,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'171',motivo:'Complejidad de Conteo',sol:'45255',estado:'Pendiente AAFF'},
+{n:9,fecha:'20/11/1996',pr:78,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'242',motivo:'Planificación Erronea',sol:'146685',estado:'Pendiente Gcia'},
+{n:120,fecha:'22/11/2025',pr:5,desc:'Inv. PDA',tipo:'Inventario Parcial',ubi:'026',motivo:'Faltante de Personal',sol:'148000',estado:'Pendiente Gcia'},
+{n:121,fecha:'22/11/2025',pr:3,desc:'Inv. Monitores',tipo:'Inventario Parcial',ubi:'131',motivo:'Complejidad de Análisis',sol:'148100',estado:'Pendiente AAFF'}
+];
+
+function render(){
+const tbody=document.querySelector('#tabla tbody');
+tbody.innerHTML='';
+data.forEach(d=>{
+const tr=document.createElement('tr');
+tr.innerHTML=`<td>${d.n}</td><td>${d.fecha}</td><td>${d.pr}</td><td>${d.desc}</td><td>${d.tipo}</td><td>${d.ubi}</td><td>${d.motivo}</td><td>${d.sol}</td><td>${d.estado}</td><td><button class="action" onclick="abrir()">Ingresar</button></td>`;
+tbody.appendChild(tr);
+});
+}
+
+function agregar(){
+data.push({n:data.length+1,fecha:'Hoy',pr:0,desc:'Nueva',tipo:'Inventario General',ubi:'007',motivo:document.getElementById('motivo').value,sol:'000',estado:'Pendiente Gcia'});
+render();
+}
+
+function abrir(){document.getElementById('modal').style.display='flex'}
+function cerrar(){document.getElementById('modal').style.display='none'}
+function aprobar(){alert('Aprobado');cerrar()}
+
+render();
+</script>
+<script src="navbar.js"></script>
+<script>
+  cargarUsuario('prorrogas');
+</script>
+
+<div class="footer-line"></div>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>IBU - Reportes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="navbar.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Lato',sans-serif}
+body{background:#F4F4F8}
+
+.top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding:0 0 60px;margin-top:-1px}
+.card{background:#fff;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+.title{color:#4B4EFC;font-weight:700}
+.line{height:2px;background:#4B4EFC;margin:12px 0 20px}
+
+.form{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  align-items:flex-end;
+}
+
+.form div{
+  display:flex;
+  flex-direction:column;
+  font-size:12px;
+  flex:1 1 160px;
+  min-width:140px;
+}
+
+.form > button{
+  height:38px;
+}
+.form input,.form select{padding:10px;border:1px solid #DADAE5;border-radius:10px}
+.btn{background:#2C3E6B;color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer}
+.btn-green{background:#43A047}
+
+.table-card{background:#DCDDE6;margin:30px;border-radius:16px;padding:24px}
+table{width:100%;border-collapse:collapse}
+th{color:#4B4EFC;font-size:13px;text-align:left;padding:12px;border-bottom:2px solid #4B4EFC}
+td{padding:12px;border-top:1px solid #E6E6EF}
+
+.status-ok{color:#43A047}
+.status-pend{color:#FB8C00}
+.status-cancel{color:#E53935}
+
+.diff-pos{color:#43A047}
+.diff-neg{color:#E53935}
+
+.action{background:#2C3E6B;color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer}
+.pdf{color:#E53935;cursor:pointer;margin-left:8px}
+
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;justify-content:center;align-items:center}
+.modal-content{background:#fff;width:60%;padding:20px;border-radius:16px}
+.footer-line{
+  height:40px;
+  background:#303D9F;
+  width:100%;
+  position:fixed;
+  bottom:0;
+  left:0;
+  z-index:999;
+}
+
+body{
+  padding-bottom:50px;
+}
+
+@media (max-width: 768px){
+  .form{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .form div{
+    width:100%;
+  }
+
+  .form > button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">
+<div id="navbar-container"></div>
+
+<div class="card">
+<div class="title">Buscar</div>
+<div class="line"></div>
+
+<div class="form">
+<div><label>Nº Inventario</label><input id="fInv"></div>
+<div><label>Estado</label>
+<select id="fEstado">
+<option value="">Todos</option>
+<option>Conciliada</option>
+<option>Pendiente</option>
+<option>Cancelada</option>
+</select>
+</div>
+<div><label>Ubicación</label><input id="fUbi"></div>
+<div><label>Tipo</label>
+<select id="fTipo">
+<option value="">Todos</option>
+<option>Inventario General</option>
+<option>Inventario Parcial</option>
+</select>
+</div>
+<div><label>Desde</label><input type="date" id="fDesde"></div>
+<div><label>Hasta</label><input type="date" id="fHasta"></div>
+
+<button class="btn" onclick="filtrar()">Buscar</button>
+<button class="btn btn-green" onclick="exportCSV()">📊</button>
+</div>
+</div>
+</div>
+
+<div class="table-card">
+<table id="tabla">
+<thead>
+<tr>
+<th>Nº</th><th>Fecha</th><th>Ubicación</th><th>Descripción</th><th>Estado</th><th>Teórico</th><th>Físico</th><th>Diferencia</th><th>Acción</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content" style="width:85%;max-height:90%;overflow:auto;">
+
+    <h2 style="text-align:center;margin-bottom:20px;">Inventario de Bienes de Uso</h2>
+
+    <div style="display:flex;justify-content:space-between;margin-bottom:20px;font-size:14px;">
+      <div><b style="color:#4B4EFC">N° Inventario</b> <span id="detN"></span></div>
+      <div><b style="color:#4B4EFC">Fecha</b> <span id="detFecha"></span></div>
+      <div><b style="color:#4B4EFC">Descripción</b> <span id="detDesc"></span></div>
+      <div><b style="color:#4B4EFC">Tipo</b> Inventario General</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>N° Clase</th>
+          <th>Descripción</th>
+          <th>Teórico</th>
+          <th>Físico Apto</th>
+          <th>Físico No Apto</th>
+          <th>Diferencia</th>
+          <th>N° Baja</th>
+          <th>N° Alta</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody id="detalleTabla"></tbody>
+    </table>
+
+    <div style="margin-top:40px;border-top:2px solid #4B4EFC;padding-top:10px;display:flex;justify-content:space-between;color:#4B4EFC;font-weight:500;">
+      <div>Administrativo</div>
+      <div>Participante</div>
+      <div>Participante</div>
+      <div>Gerencia</div>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;">
+      <button class="btn" onclick="cerrar()">Cerrar</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer-line"></div>
+
+<script>
+function goInicio(){window.location.href="dashboard.html"}
+function goInventario(){window.location.href="inventario.html"}
+function goProrrogas(){window.location.href="prorrogas.html"}
+function goUsuarios(){window.location.href="usuarios.html"}
+
+let data=[
+{n:36,fecha:'2025-11-20',ubi:'002',desc:'Inventario General Septiembre',estado:'Conciliada',teo:10,fis:10},
+{n:587,fecha:'2025-11-21',ubi:'125',desc:'Inventario General Septiembre',estado:'Pendiente',teo:1,fis:1},
+{n:4522,fecha:'2025-11-20',ubi:'171',desc:'Inventario de Monitores',estado:'Cancelada',teo:0,fis:0},
+{n:24,fecha:'1996-11-20',ubi:'065',desc:'Inventario General Septiembre',estado:'Conciliada',teo:20,fis:19},
+{n:65,fecha:'1996-11-20',ubi:'512',desc:'Inventario de Notebooks',estado:'Conciliada',teo:1,fis:1},
+{n:824,fecha:'1996-11-20',ubi:'512',desc:'Inventario de PDA',estado:'Conciliada',teo:1,fis:2}
+];
+
+function render(arr=data){
+const tbody=document.querySelector('#tabla tbody');
+tbody.innerHTML='';
+arr.forEach(d=>{
+let diff=d.fis-d.teo;
+let estadoClass=d.estado==='Conciliada'?'status-ok':d.estado==='Pendiente'?'status-pend':'status-cancel';
+let diffClass=diff>0?'diff-pos':diff<0?'diff-neg':'';
+
+const tr=document.createElement('tr');
+tr.innerHTML=`
+<td>${d.n}</td>
+<td>${d.fecha}</td>
+<td>${d.ubi}</td>
+<td>${d.desc}</td>
+<td class="${estadoClass}">${d.estado}</td>
+<td>${d.teo}</td>
+<td>${d.fis}</td>
+<td class="${diffClass}">${diff}</td>
+<td>
+<button class="action" onclick="detalle(${d.n})">Detalles</button>
+<span class="pdf" onclick="imprimir()">📄</span>
+</td>`;
+
+tbody.appendChild(tr);
+});
+}
+
+function filtrar(){
+let inv=document.getElementById('fInv').value;
+let estado=document.getElementById('fEstado').value;
+let filtrado=data.filter(d=>
+(!inv||d.n==inv)&&
+(!estado||d.estado==estado)
+);
+render(filtrado);
+}
+
+function exportCSV(){
+let csv="data:text/csv;charset=utf-8,";
+data.forEach(d=>{csv+=`${d.n},${d.fecha},${d.ubi},${d.desc}\n`;});
+let link=document.createElement('a');
+link.href=encodeURI(csv);
+link.download='reporte.csv';
+link.click();
+}
+
+function detalle(n){
+  const item = data.find(d=>d.n==n);
+
+  document.getElementById('detN').innerText = item.n;
+  document.getElementById('detFecha').innerText = new Date(item.fecha).toLocaleDateString('es-AR');
+  document.getElementById('detDesc').innerText = item.desc;
+
+  // Mock detalle clases
+  const clases = [
+    {c:1,desc:'Changos',teo:300,apto:298,noapto:1,baja:'98524',alta:'',obs:'Faltante por hurto'},
+    {c:2,desc:'Monitor',teo:50,apto:50,noapto:0,baja:'98525',alta:'25415',obs:'Sobrante detectado'},
+    {c:3,desc:'PDA',teo:20,apto:19,noapto:0,baja:'98529',alta:'',obs:'Faltante proveedor'},
+    {c:78,desc:'Notebook',teo:2,apto:2,noapto:1,baja:'',alta:'25416',obs:'Sobrante'}
+  ];
+
+  const tbody = document.getElementById('detalleTabla');
+  tbody.innerHTML='';
+
+  clases.forEach(cl=>{
+    let diff = (cl.apto + cl.noapto) - cl.teo;
+    let diffClass = diff>0?'diff-pos':diff<0?'diff-neg':'';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${cl.c}</td>
+      <td>${cl.desc}</td>
+      <td>${cl.teo}</td>
+      <td>${cl.apto}</td>
+      <td>${cl.noapto}</td>
+      <td class="${diffClass}">${diff}</td>
+      <td>${cl.baja}</td>
+      <td>${cl.alta}</td>
+      <td>${cl.obs}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('modal').style.display='flex';
+}
+function cerrar(){document.getElementById('modal').style.display='none'}
+function imprimir(){window.print()}
+
+render();
+</script>
+<script src="navbar.js"></script>
+<script>
+  cargarUsuario('reportes');
+</script>
+
+</body>
+</html>

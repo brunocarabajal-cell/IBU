@@ -197,28 +197,46 @@
   </div>
 
   <script>
-    function login() {
-      const usuario = document.getElementById('usuario').value.trim();
+    async function login() {
+      const legajo = document.getElementById('usuario').value.trim();
       const password = document.getElementById('password').value.trim();
       const error = document.getElementById('error');
 
-      if (!usuario || !password) {
+      if (!legajo || !password) {
+        error.innerText = "Completar todos los campos";
         error.style.display = 'block';
         return;
       }
 
       error.style.display = 'none';
 
-      const userData = {
-        nombre: 'Bruno Carabajal',
-        rol: 'Analista',
-        legajo: '700'
-      };
+      try {
+        const res = await fetch('http://127.0.0.1:3000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ legajo, password })
+        });
 
-      localStorage.setItem('ibu_user', JSON.stringify(userData));
+        const data = await res.json();
 
-      // Redireccion a Dashboard
-     window.location.href = "dashboard.html";;
+        if (!res.ok) {
+          error.innerText = data.error || 'Error en login';
+          error.style.display = 'block';
+          return;
+        }
+
+        localStorage.setItem('ibu_user', JSON.stringify({
+          nombre: data.nombre,
+          rol: data.puesto,
+          legajo: data.codigo
+        }));
+
+        window.location.href = "dashboard.html";
+
+      } catch (e) {
+        error.innerText = "Error de conexión con el servidor";
+        error.style.display = 'block';
+      }
     }
   </script>
 </body>
