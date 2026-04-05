@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IBU - Inventario</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="navbar.css">
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/button_styles.css">
+<link rel="stylesheet" href="../css/select_styles.css">
+<link rel="stylesheet" href="../css/input_text_styles.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
 body{background:#F4F4F8;color:#1A1A2E; padding-bottom:50px;}
@@ -18,9 +21,88 @@ body{background:#F4F4F8;color:#1A1A2E; padding-bottom:50px;}
 .create-card{background:#fff;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
 .create-title{color:#4B4EFC;font-weight:700;font-size:16px}
 .create-line{height:2px;background:#4B4EFC;margin:12px 0 20px;width:100%}
-.create-form{display:flex;gap:12px;align-items:center}
-.create-form input,.create-form select{padding:10px 12px;border:1px solid #DADAE5;border-radius:10px;background:#fff}
+.create-form{
+  display:flex;
+  gap:20px;
+  align-items:stretch; /* 🔥 mejor alineación uniforme */
+  flex-wrap:wrap;
+  width:100%; /* 🔥 evita cortes raros */
+}
+.create-form .field{
+  display:flex;
+  flex-direction:column;
+  font-size:12px;
+  gap:4px;
+  flex:1;
+  min-width:180px;
+  justify-content:flex-start; /* 🔥 evita desplazamientos raros */
+}
+
+.create-form .field > *:last-child {
+  display:flex;
+  align-items:center;
+  height:40px;
+}
+
+#create-descripcion, #input-descripcion{
+  display:flex;
+  width:100%;
+}
+
+.create-form .field:first-child{
+  flex:2 1 300px; /* 🔥 más espacio y evita que quede sola */
+}
+.create-form input,
+.select-wrapper{
+  width:100%; /* 🔥 full width */
+}
+.create-form input{
+  padding:8px 12px;
+  border:1px solid #DADAE5;
+  border-radius:10px;
+  background:#fff;
+  height:40px; /* 🔥 altura unificada */
+}
+
+.select-selected{
+  height:40px !important; /* 🔥 igual que input */
+  padding:8px 12px !important;
+}
+
+input[type="date"]{
+  height:40px;
+}
+
 .create-btn{background:#2C3E6B;color:#fff;border:none;padding:10px 24px;border-radius:10px;cursor:pointer;font-weight:600;letter-spacing:0.3px}
+
+/* 🔥 Unificar altura de todos los controles */
+.input-base,
+.select-selected,
+input[type="date"] {
+  height: 40px !important;
+  padding: 8px 12px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* asegurar que el wrapper del select no altere la altura */
+.select-wrapper {
+  height: 40px;
+}
+
+/* botón alineado a la misma altura */
+#btn-crear-container .btn-principal {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* Prevent label misalignment */
+.create-form .field label{
+  height:16px;
+  display:flex;
+  align-items:center;
+}
 
 /* TABLA */
 .table-card{background:#DCDDE6;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
@@ -62,43 +144,33 @@ td{padding:12px;border-top:1px solid #E6E6EF;font-size:14px}
 <div class="create-card">
   <div class="create-title">Creación</div>
   <div class="create-line"></div>
-  <div class="create-form" style="justify-content:space-between;width:100%;">
-    <div style="display:flex;flex-direction:column;font-size:12px;gap:4px;">
+<div class="create-form">
+    <div class="field">
       <label>Descripción</label>
-      <input placeholder="Valor" id="desc">
+      <div id="input-descripcion"></div>
     </div>
 
-    <div style="display:flex;flex-direction:column;font-size:12px;gap:4px;">
+    <div class="field">
       <label>Ubicación</label>
-      <select id="ubicacion">
-        <option>Seleccionar</option>
-        <option>007</option><option>131</option><option>171</option><option>242</option><option>026</option>
-      </select>
+      <div id="select-ubicacion"></div>
     </div>
 
-    <div style="display:flex;flex-direction:column;font-size:12px;gap:4px;">
+    <div class="field">
       <label>Tipo</label>
-      <select id="tipo">
-        <option>Seleccionar</option>
-        <option>Inventario General</option>
-        <option>Inventario Parcial</option>
-      </select>
+      <div id="select-tipo"></div>
     </div>
 
-    <div style="display:flex;flex-direction:column;font-size:12px;gap:4px;">
+    <div class="field">
       <label>Nº Clases</label>
-      <select id="clases">
-        <option>Seleccionar</option>
-        <option>1</option><option>2</option><option>3</option>
-      </select>
+      <div id="select-clases"></div>
     </div>
 
-    <div style="display:flex;flex-direction:column;font-size:12px;gap:4px;">
+    <div class="field">
       <label>Fecha</label>
       <input type="date" id="fecha">
     </div>
 
-    <button class="create-btn" onclick="crear()">Crear</button>
+    <div id="btn-crear-container" style="display:flex;align-items:flex-end;margin-left:auto;height:40px;"></div>
   </div>
 </div>
 
@@ -210,7 +282,7 @@ tbody.appendChild(tr);
 }
 
 function crear(){
-data.push({n:data.length+1,fecha:'Hoy',dias:0,desc:document.getElementById('desc').value,tipo:'General',ubi:'007',clases:1});
+data.push({n:data.length+1,fecha:'Hoy',dias:0,desc: descripcionValor,tipo:'General',ubi:'007',clases:1});
 render();
 }
 
@@ -271,9 +343,59 @@ render();
 </script>
 
 <div class="footer-line"></div>
-<script src="navbar.js"></script>
+<script src="../js/button_principal.js"></script>
+<script src="../js/select.js"></script>
+<script src="../js/input_text.js"></script>
+<script src="../js/navbar.js"></script>
 <script>
   cargarUsuario('inventario');
 </script>
+<script>
+  const contenedorBtn = document.getElementById('btn-crear-container');
+
+  const botonCrear = crearBotonPrincipal({
+    texto: 'Crear',
+    onClick: crear,
+    size: 'lg'
+  });
+
+  contenedorBtn.appendChild(botonCrear);
+</script>
+
+<script>
+  // 🎯 Inicializar selects personalizados
+  const selectUbicacion = crearDesplegable({
+    opciones: ['007','131','171','242','026'],
+    placeholder: 'Seleccionar'
+  });
+
+  const selectTipo = crearDesplegable({
+    opciones: ['Inventario General','Inventario Parcial'],
+    placeholder: 'Seleccionar'
+  });
+
+  const selectClases = crearDesplegable({
+    opciones: ['1','2','3'],
+    placeholder: 'Seleccionar'
+  });
+
+  document.getElementById('select-ubicacion').appendChild(selectUbicacion);
+  document.getElementById('select-tipo').appendChild(selectTipo);
+  document.getElementById('select-clases').appendChild(selectClases);
+</script>
+<script>
+  // 🎯 Inicializar input reutilizable
+  let descripcionValor = '';
+
+  const inputDescripcion = crearInput({
+    placeholder: 'Valor',
+    onChange: (val) => {
+      descripcionValor = val;
+    }
+  });
+
+  document.getElementById('input-descripcion').appendChild(inputDescripcion);
+</script>
+
 </body>
 </html>

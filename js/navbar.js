@@ -27,7 +27,7 @@ function renderNavbar(active){
     <div class="navbar">
 
       <div style="display:flex;align-items:center;gap:8px;font-weight:600;">
-        <img src="logo.png" style="width:26px;height:26px;">
+        <img src="../assets/logo.png" style="width:26px;height:26px;">
         <span>IBU</span>
       </div>
 
@@ -42,7 +42,7 @@ function renderNavbar(active){
       </div>
 
       <div class="nav-user">
-        <img src="user.jpg" class="avatar-img">
+        <img src="../assets/user.jpg" class="avatar-img">
         <div>
           <div style="font-weight:500;">${user.nombre}</div>
           <div style="font-size:12px;opacity:0.7;">${user.rol}</div>

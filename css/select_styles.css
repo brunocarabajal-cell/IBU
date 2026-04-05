@@ -1,0 +1,72 @@
+/* 🎯 Wrapper */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+}
+
+/* 🧩 Campo visible (como input) */
+.select-selected {
+  padding: 8px 12px;
+  border: 1px solid #DADAE5;
+  border-radius: 10px;
+  background: #fff; /* igual que descripción */
+  cursor: pointer;
+  font-size: 11px;
+  color: #8A8A95; /* gris como inputs */
+  height: 40px; /* más alto para evitar superposición */
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-family: 'Lato', sans-serif;
+}
+
+.select-selected::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #8A8A95;
+  border-bottom: 2px solid #8A8A95;
+  transform: translateY(-50%) rotate(45deg);
+  top: 50%;
+}
+
+.select-selected.active {
+  border-color: #4B4EFC;
+}
+
+/* 📦 Lista desplegable */
+.select-items {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #DADAE5;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  z-index: 99;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+/* opciones */
+.select-items div {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  color: #8A8A95;
+  font-family: 'Lato', sans-serif;
+}
+
+/* hover */
+.select-items div:hover {
+  background: #EDEDF5;
+}
+
+/* oculto */
+.select-hide {
+  display: none;
+}
