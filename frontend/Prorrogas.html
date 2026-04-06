@@ -6,6 +6,10 @@
 <title>IBU - Prórrogas</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/input_text_styles.css">
+<link rel="stylesheet" href="../css/select_styles.css">
+<link rel="stylesheet" href="../css/button_styles.css">
+<link rel="stylesheet" href="../css/input_date_styles.css">
 <style>
 /* Footer styles moved inside style tag */
 .footer-line{
@@ -32,8 +36,19 @@ body{background:#F4F4F8;color:#1A1A2E}
 .title{color:#4B4EFC;font-weight:700}
 .line{height:2px;background:#4B4EFC;margin:12px 0 20px}
 
-.form{display:flex;gap:15px;align-items:end}
+.form{display:flex;gap:15px;align-items:end;width:100%}
+.form > div{flex:1}
+
+/* 🔥 inputs más grandes */
+.form > div:nth-child(1){flex:1.5} /* Nº Inventario */
+.form > div:nth-child(2){flex:2}   /* Motivo */
+.form > div:nth-child(3){flex:1.5} /* Fecha */
+
+/* 🔥 botones más chicos */
+#btn-aceptar{flex:0.6}
+#btn-reportes{flex:0.4}
 .form div{display:flex;flex-direction:column;font-size:12px}
+.form div > div{width:100%}
 .form input,.form select{padding:10px;border:1px solid #DADAE5;border-radius:10px}
 .btn{background:#2C3E6B;color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer}
 .btn-green{background:#43A047}
@@ -77,6 +92,53 @@ td{
   border-radius:8px;
   padding:8px;
 }
+
+/* Updated select items div for checkbox alignment */
+.select-items div {
+  display: flex;
+  flex-direction: row; /* 🔥 asegurar horizontal */
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+
+.select-items div span {
+  display: inline-block;
+  line-height: 1;
+}
+
+/* 🔥 alinear texto del select como input */
+.select-selected {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  padding-left: 12px;
+  padding-top: 12px; /* 🔥 ajuste solicitado */
+}
+
+.select-text {
+  flex: 1;
+  width: 100%; /* 🔥 fuerza ocupar todo el ancho */
+  display: block;
+  text-align: left;
+}
+
+/* 🔥 ocultar dropdown por defecto */
+.select-items {
+  display: none;
+}
+
+.select-items.select-hide {
+  display: none;
+}
+
+.select-items:not(.select-hide) {
+  display: block;
+}
+
 </style>
 
 </head>
@@ -91,23 +153,18 @@ td{
 <div class="form">
 <div>
 <label>Nº Inventario</label>
-<input id="inv">
+<div id="input-inv"></div>
 </div>
 <div>
 <label>Motivo</label>
-<select id="motivo">
-<option>Planificación Erronea</option>
-<option>Faltante de Personal</option>
-<option>Complejidad de Análisis</option>
-<option>Complejidad de Conteo</option>
-</select>
+<div id="select-motivo"></div>
 </div>
 <div>
 <label>Fecha Límite de Prórroga</label>
-<input type="date" id="fecha">
+<div id="input-fecha"></div>
 </div>
-<button class="btn" onclick="agregar()">Aceptar</button>
-<button class="btn btn-green">📊</button>
+<div id="btn-aceptar"></div>
+<div id="btn-reportes"></div>
 </div>
 </div>
 </div>
@@ -209,7 +266,7 @@ tbody.appendChild(tr);
 }
 
 function agregar(){
-data.push({n:data.length+1,fecha:'Hoy',pr:0,desc:'Nueva',tipo:'Inventario General',ubi:'007',motivo:document.getElementById('motivo').value,sol:'000',estado:'Pendiente Gcia'});
+data.push({n:data.length+1,fecha:'Hoy',pr:0,desc:'Nueva',tipo:'Inventario General',ubi:'007',motivo: motivoValor,sol:'000',estado:'Pendiente Gcia'});
 render();
 }
 
@@ -222,6 +279,59 @@ render();
 <script src="../js/navbar.js"></script>
 <script>
   cargarUsuario('prorrogas');
+</script>
+<script src="../js/input_text.js"></script>
+<script src="../js/select.js"></script>
+<script src="../js/input_date.js"></script>
+<script src="../js/button_principal.js"></script>
+<script>
+  // 🎯 Estado
+  let invValor = '';
+  let motivoValor = '';
+  let fechaValor = '';
+
+  // 🎯 Input Nº Inventario
+  const inputInv = crearInput({
+    placeholder: 'Valor',
+    onChange: (v)=> invValor = v
+  });
+  document.getElementById('input-inv').appendChild(inputInv);
+
+  // 🎯 Select Motivo
+  const selectMotivo = crearDesplegable({
+    opciones: ['Planificación Erronea','Faltante de Personal','Complejidad de Análisis','Complejidad de Conteo'],
+    placeholder: 'Seleccionar',
+    multiple: false,
+    onChange: (v)=> motivoValor = v
+  });
+  document.getElementById('select-motivo').appendChild(selectMotivo);
+
+  // 🎯 Input Fecha
+  const inputFecha = crearInputDate({
+    value: '',
+    onChange: (v)=> fechaValor = v
+  });
+  document.getElementById('input-fecha').appendChild(inputFecha);
+
+  // 🎯 Botón Aceptar
+  const btnAceptar = crearBotonPrincipal({
+    texto: 'Aceptar',
+    onClick: ()=> agregar()
+  });
+  document.getElementById('btn-aceptar').appendChild(btnAceptar);
+
+  // 🎯 Botón Reportes
+  const btnReportes = crearBotonPrincipal({
+    texto: '',
+    onClick: ()=> {}
+  });
+  // 🔥 agregar imagen excel
+  const imgExcel = document.createElement('img');
+  imgExcel.src = '../assets/excel.png';
+  imgExcel.style.width = '18px';
+  imgExcel.style.height = '18px';
+  btnReportes.appendChild(imgExcel);
+  document.getElementById('btn-reportes').appendChild(btnReportes);
 </script>
 
 <div class="footer-line"></div>

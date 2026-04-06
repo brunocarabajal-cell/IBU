@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="../css/button_styles.css">
 <link rel="stylesheet" href="../css/select_styles.css">
 <link rel="stylesheet" href="../css/input_text_styles.css">
+<link rel="stylesheet" href="../css/input_date_styles.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
 body{background:#F4F4F8;color:#1A1A2E; padding-bottom:50px;}
@@ -95,6 +96,7 @@ input[type="date"] {
   height: 40px;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 /* Prevent label misalignment */
@@ -167,10 +169,10 @@ td{padding:12px;border-top:1px solid #E6E6EF;font-size:14px}
 
     <div class="field">
       <label>Fecha</label>
-      <input type="date" id="fecha">
+      <div id="input-fecha"></div>
     </div>
 
-    <div id="btn-crear-container" style="display:flex;align-items:flex-end;margin-left:auto;height:40px;"></div>
+    <div id="btn-crear-container" style="display:flex;align-items:center;margin-left:auto;margin-top:15px;"></div>
   </div>
 </div>
 
@@ -282,7 +284,7 @@ tbody.appendChild(tr);
 }
 
 function crear(){
-data.push({n:data.length+1,fecha:'Hoy',dias:0,desc: descripcionValor,tipo:'General',ubi:'007',clases:1});
+data.push({n:data.length+1,fecha: fechaValor || 'Hoy',dias:0,desc: descripcionValor,tipo:'General',ubi:'007',clases:1});
 render();
 }
 
@@ -346,6 +348,7 @@ render();
 <script src="../js/button_principal.js"></script>
 <script src="../js/select.js"></script>
 <script src="../js/input_text.js"></script>
+<script src="../js/input_date.js"></script>
 <script src="../js/navbar.js"></script>
 <script>
   cargarUsuario('inventario');
@@ -366,17 +369,20 @@ render();
   // 🎯 Inicializar selects personalizados
   const selectUbicacion = crearDesplegable({
     opciones: ['007','131','171','242','026'],
-    placeholder: 'Seleccionar'
+    placeholder: 'Seleccionar',
+    multiple: true
   });
 
   const selectTipo = crearDesplegable({
     opciones: ['Inventario General','Inventario Parcial'],
-    placeholder: 'Seleccionar'
+    placeholder: 'Seleccionar',
+    multiple: true
   });
 
   const selectClases = crearDesplegable({
     opciones: ['1','2','3'],
-    placeholder: 'Seleccionar'
+    placeholder: 'Seleccionar',
+    multiple: true
   });
 
   document.getElementById('select-ubicacion').appendChild(selectUbicacion);
@@ -395,6 +401,19 @@ render();
   });
 
   document.getElementById('input-descripcion').appendChild(inputDescripcion);
+</script>
+<script>
+  // 🎯 Inicializar input fecha reutilizable
+  let fechaValor = '';
+
+  const inputFecha = crearInputDate({
+    value: '',
+    onChange: (val) => {
+      fechaValor = val;
+    }
+  });
+
+  document.getElementById('input-fecha').appendChild(inputFecha);
 </script>
 
 </body>

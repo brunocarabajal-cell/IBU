@@ -2,23 +2,31 @@
 .select-wrapper {
   position: relative;
   width: 100%;
-  min-height: 40px;
+  height: 42px; /* 🔥 más grande */
+  max-height: 42px; /* 🔥 evita que crezca */
+  flex: 0 0 auto; /* 🔥 evita estiramiento por flex */
 }
 
 /* 🧩 Campo visible (como input) */
 .select-selected {
-  padding: 8px 12px;
+  padding: 0 28px 0 10px; /* 🔥 menos espacio */
   border: 1px solid #DADAE5;
   border-radius: 10px;
-  background: #fff; /* igual que descripción */
+  background: #fff;
   cursor: pointer;
-  font-size: 11px;
-  color: #8A8A95; /* gris como inputs */
-  height: 40px; /* más alto para evitar superposición */
-  display: flex;
-  align-items: center;
+  font-size: 12px; /* 🔥 más legible */
+  color: #8A8A95;
+  height: 42px; /* 🔥 altura fija real */
+  display: flex; /* 🔥 usar flex correctamente */
+  align-items: center; /* 🔥 centra verticalmente */
+  justify-content: flex-start; /* 🔥 fuerza izquierda REAL */
+  text-align: left;
   position: relative;
   font-family: 'Lato', sans-serif;
+  white-space: nowrap;       /* 🔥 evita salto de línea */
+  overflow: hidden;          /* 🔥 oculta exceso */
+  text-overflow: ellipsis;   /* 🔥 agrega ... */
+  width: 100%;
 }
 
 .select-selected::after {
@@ -42,7 +50,7 @@
   position: absolute;
   top: 110%;
   left: 0;
-  right: 0;
+  width: 100%; /* 🔥 asegura alineación exacta con el input */
   background: #fff;
   border: 1px solid #DADAE5;
   border-radius: 10px;
@@ -50,13 +58,15 @@
   z-index: 99;
   overflow: hidden;
   margin-top: 4px;
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 /* opciones */
 .select-items div {
-  padding: 10px 12px;
+  padding: 8px 10px;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 12px;
   color: #8A8A95;
   font-family: 'Lato', sans-serif;
 }
@@ -69,4 +79,37 @@
 /* oculto */
 .select-hide {
   display: none;
+}
+
+/* 🔥 Item seleccionado */
+.select-items div.selected-item {
+  background: #E4E6FF;
+  color: #1A1A2E;
+  font-weight: 500;
+}
+
+/* 🔥 checkbox layout */
+.select-items div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-checkbox {
+  accent-color: #4B4EFC;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+}
+
+.select-all-item {
+  font-weight: 500;
+  border-bottom: 1px solid #EDEDF5;
+}
+
+.select-text {
+  flex: 1;
+  text-align: left;
+  display: block;
 }

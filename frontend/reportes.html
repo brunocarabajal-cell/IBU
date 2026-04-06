@@ -5,29 +5,33 @@
 <title>IBU - Reportes</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/input_text_styles.css">
+<link rel="stylesheet" href="../css/select_styles.css">
+<link rel="stylesheet" href="../css/input_date_styles.css">
+<link rel="stylesheet" href="../css/button_styles.css">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Lato',sans-serif}
 body{background:#F4F4F8}
 
-.top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding:0 0 60px;margin-top:-1px}
-.card{background:#fff;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+.top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding:0 0 20px;margin-top:-1px}
+.card{background:#fff;margin:20px;border-radius:16px;padding:22px 18px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
 .title{color:#4B4EFC;font-weight:700}
-.line{height:2px;background:#4B4EFC;margin:12px 0 20px}
+.line{height:2px;background:#4B4EFC;margin:16px 0 20px}
 
 .form{
   display:flex;
-  flex-wrap:wrap;
-  gap:15px;
+  gap:12px;
   align-items:flex-end;
+  flex-wrap:nowrap; /* 🔥 todo en una sola línea */
 }
 
 .form div{
   display:flex;
   flex-direction:column;
   font-size:12px;
-  flex:1 1 160px;
-  min-width:140px;
+  flex:1;
+  min-width:0; /* 🔥 evita que se rompa la línea */
 }
 
 .form > button{
@@ -68,6 +72,90 @@ body{
   padding-bottom:50px;
 }
 
+/* Added fixes for select oversized boxes */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  height: 102px; /* 🔥 altura solicitada */
+}
+
+.select-selected {
+  height: 102px; /* 🔥 misma altura real */
+  padding: 12px 38px 26px 10px; /* 🔥 baja apenas el texto */
+  border: 1px solid #DADAE5;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  color: #8A8A95;
+
+  display: flex;
+  align-items: flex-start; /* 🔥 sube el texto */
+  justify-content: flex-start;
+
+  text-align: left;
+  position: relative;
+  font-family: 'Lato', sans-serif;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select-items {
+  display: none;
+  max-height: 220px; /* 🔥 limitar altura */
+  overflow-y: auto;  /* 🔥 scroll si hay muchas opciones */
+}
+
+.select-items.select-hide {
+  display: none;
+}
+
+.select-items:not(.select-hide) {
+  display: block;
+}
+
+.select-items div {
+  min-height: auto; /* 🔥 evita estiramiento */
+}
+
+</style>
+<style>
+/* 🔥 altura uniforme por componente */
+.input-text-wrapper,
+.input-date-wrapper {
+  height: 40px;
+}
+
+.select-wrapper {
+  height: 102px; /* 🔥 altura consistente */
+}
+
+/* asegurar que el contenido ocupe todo el alto */
+.select-selected {
+  height: 100%;
+}
+
+
+/* botones alineados */
+#btn-buscar,
+#btn-excel {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+#btn-buscar,
+#btn-excel{
+  flex:0 0 auto; /* 🔥 no se estiran */
+}
+
+#btn-buscar button,
+#btn-excel button {
+  height: 40px;
+}
+
 @media (max-width: 768px){
   .form{
     flex-direction:column;
@@ -95,28 +183,14 @@ body{
 <div class="line"></div>
 
 <div class="form">
-<div><label>Nº Inventario</label><input id="fInv"></div>
-<div><label>Estado</label>
-<select id="fEstado">
-<option value="">Todos</option>
-<option>Conciliada</option>
-<option>Pendiente</option>
-<option>Cancelada</option>
-</select>
-</div>
-<div><label>Ubicación</label><input id="fUbi"></div>
-<div><label>Tipo</label>
-<select id="fTipo">
-<option value="">Todos</option>
-<option>Inventario General</option>
-<option>Inventario Parcial</option>
-</select>
-</div>
-<div><label>Desde</label><input type="date" id="fDesde"></div>
-<div><label>Hasta</label><input type="date" id="fHasta"></div>
-
-<button class="btn" onclick="filtrar()">Buscar</button>
-<button class="btn btn-green" onclick="exportCSV()">📊</button>
+<div><label>Nº Inventario</label><div id="input-inv"></div></div>
+<div><label>Estado</label><div id="select-estado"></div></div>
+<div><label>Ubicación</label><div id="input-ubi"></div></div>
+<div><label>Tipo</label><div id="select-tipo"></div></div>
+<div><label>Desde</label><div id="input-desde"></div></div>
+<div><label>Hasta</label><div id="input-hasta"></div></div>
+<div id="btn-buscar"></div>
+<div id="btn-excel"></div>
 </div>
 </div>
 </div>
@@ -212,7 +286,9 @@ tr.innerHTML=`
 <td class="${diffClass}">${diff}</td>
 <td>
 <button class="action" onclick="detalle(${d.n})">Detalles</button>
-<span class="pdf" onclick="imprimir()">📄</span>
+<span class="pdf" onclick="imprimir()">
+  <img src="../assets/pdf_icon.png" style="width:16px;vertical-align:middle;">
+</span>
 </td>`;
 
 tbody.appendChild(tr);
@@ -220,11 +296,9 @@ tbody.appendChild(tr);
 }
 
 function filtrar(){
-let inv=document.getElementById('fInv').value;
-let estado=document.getElementById('fEstado').value;
-let filtrado=data.filter(d=>
-(!inv||d.n==inv)&&
-(!estado||d.estado==estado)
+let filtrado = data.filter(d =>
+  (!invValor || d.n == invValor) &&
+  (!estadoValor || estadoValor === 'Todos' || d.estado === estadoValor)
 );
 render(filtrado);
 }
@@ -280,6 +354,63 @@ function detalle(n){
 }
 function cerrar(){document.getElementById('modal').style.display='none'}
 function imprimir(){window.print()}
+
+</script>
+<script src="../js/input_text.js"></script>
+<script src="../js/select.js"></script>
+<script src="../js/input_date.js"></script>
+<script src="../js/button_principal.js"></script>
+<script>
+// 🎯 Estado de filtros
+let invValor = '';
+let estadoValor = '';
+let ubiValor = '';
+let tipoValor = '';
+let desdeValor = '';
+let hastaValor = '';
+
+// Inputs
+const inputInv = crearInput({ placeholder: 'Valor', onChange: v => invValor = v });
+document.getElementById('input-inv').appendChild(inputInv);
+
+const inputUbi = crearInput({ placeholder: 'Valor', onChange: v => ubiValor = v });
+document.getElementById('input-ubi').appendChild(inputUbi);
+
+// Selects
+const selectEstado = crearDesplegable({
+  opciones: ['Todos','Conciliada','Pendiente','Cancelada'],
+  placeholder: 'Todos',
+  multiple: false,
+  onChange: v => estadoValor = v
+});
+document.getElementById('select-estado').appendChild(selectEstado);
+
+const selectTipo = crearDesplegable({
+  opciones: ['Todos','Inventario General','Inventario Parcial'],
+  placeholder: 'Todos',
+  multiple: false,
+  onChange: v => tipoValor = v
+});
+document.getElementById('select-tipo').appendChild(selectTipo);
+
+// Dates
+const inputDesde = crearInputDate({ onChange: v => desdeValor = v });
+document.getElementById('input-desde').appendChild(inputDesde);
+
+const inputHasta = crearInputDate({ onChange: v => hastaValor = v });
+document.getElementById('input-hasta').appendChild(inputHasta);
+
+// Buttons
+const btnBuscar = crearBotonPrincipal({ texto: 'Buscar', onClick: ()=> filtrar() });
+document.getElementById('btn-buscar').appendChild(btnBuscar);
+
+const btnExcel = crearBotonPrincipal({ texto: '', onClick: ()=> exportCSV() });
+const imgExcel = document.createElement('img');
+imgExcel.src = '../assets/excel.png';
+imgExcel.style.width = '18px';
+imgExcel.style.height = '18px';
+btnExcel.appendChild(imgExcel);
+document.getElementById('btn-excel').appendChild(btnExcel);
 
 render();
 </script>
