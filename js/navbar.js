@@ -1,19 +1,24 @@
 async function cargarUsuario(active){
+  let data = null;
   try {
     const res = await fetch('http://localhost:3000/usuarios/146685');
-    const data = await res.json();
-
-    localStorage.setItem('ibu_user', JSON.stringify({
-      nombre: data.nombre,
-      rol: data.puesto,
-      legajo: data.codigo
-    }));
-
-    renderNavbar(active);
-  } catch (error) {
-    console.error('Error cargando usuario:', error);
-    renderNavbar(active);
+    data = await res.json();
+  } catch (e) {
+    console.warn('API no disponible, usando datos mock');
+    data = {
+      nombre: 'Bruno Carabajal',
+      puesto: 'Analista',
+      codigo: '700'
+    };
   }
+
+  localStorage.setItem('ibu_user', JSON.stringify({
+    nombre: data.nombre,
+    rol: data.puesto,
+    legajo: data.codigo
+  }));
+
+  renderNavbar(active);
 }
 function renderNavbar(active){
   const user = JSON.parse(localStorage.getItem('ibu_user')) || {
@@ -27,7 +32,7 @@ function renderNavbar(active){
     <div class="navbar">
 
       <div style="display:flex;align-items:center;gap:8px;font-weight:600;">
-        <img src="../assets/logo.png" style="width:26px;height:26px;">
+        <img src="../assets/Logo.png" style="width:26px;height:26px;">
         <span>IBU</span>
       </div>
 
