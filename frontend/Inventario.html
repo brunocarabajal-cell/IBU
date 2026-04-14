@@ -347,6 +347,7 @@ render();
 <div class="footer-line"></div>
 <script src="../js/button_principal.js"></script>
 <script src="../js/select.js"></script>
+<script src="../js/select_mult.js"></script>
 <script src="../js/input_text.js"></script>
 <script src="../js/input_date.js"></script>
 <script src="../js/navbar.js"></script>
@@ -367,8 +368,8 @@ render();
 
 <script>
   // 🎯 Inicializar selects personalizados
-  const selectUbicacion = crearDesplegable({
-    opciones: ['007','131','171','242','026'],
+  const selectUbicacion = select_mult('#select-ubicacion', {
+    options: ['007','131','171','242','026'],
     placeholder: 'Seleccionar',
     multiple: true
   });
@@ -376,18 +377,16 @@ render();
   const selectTipo = crearDesplegable({
     opciones: ['Inventario General','Inventario Parcial'],
     placeholder: 'Seleccionar',
-    multiple: true
+    multiple: false
   });
 
-  const selectClases = crearDesplegable({
-    opciones: ['1','2','3'],
+  document.getElementById('select-tipo').appendChild(selectTipo);
+
+  const selectClases = select_mult('#select-clases', {
+    options: ['1','2','3'],
     placeholder: 'Seleccionar',
     multiple: true
   });
-
-  document.getElementById('select-ubicacion').appendChild(selectUbicacion);
-  document.getElementById('select-tipo').appendChild(selectTipo);
-  document.getElementById('select-clases').appendChild(selectClases);
 </script>
 <script>
   // 🎯 Inicializar input reutilizable

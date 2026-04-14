@@ -15,15 +15,25 @@
 body{background:#F4F4F8}
 
 .top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding:0 0 20px;margin-top:-1px}
-.card{background:#fff;margin:20px;border-radius:16px;padding:22px 18px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+.card{background:#fff;margin:20px;border-radius:16px;padding:22px 18px 28px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
 .title{color:#4B4EFC;font-weight:700}
 .line{height:2px;background:#4B4EFC;margin:16px 0 20px}
+
+
+/* 🔥 asegurar borde completo tipo input */
+.select-wrapper {
+  border: none !important;
+}
 
 .form{
   display:flex;
   gap:12px;
-  align-items:flex-end;
+  align-items: flex-start; /* 🔥 alinea todos arriba */
   flex-wrap:nowrap; /* 🔥 todo en una sola línea */
+}
+
+.form {
+  margin-bottom: 6px; /* 🔥 evita que se corte abajo */
 }
 
 .form div{
@@ -32,12 +42,13 @@ body{background:#F4F4F8}
   font-size:12px;
   flex:1;
   min-width:0; /* 🔥 evita que se rompa la línea */
+  gap: 4px; /* 🔥 espacio consistente entre label y campo */
 }
 
 .form > button{
   height:38px;
 }
-.form input,.form select{padding:10px;border:1px solid #DADAE5;border-radius:10px}
+.form input{padding:10px;border:1px solid #DADAE5;border-radius:10px}
 .btn{background:#2C3E6B;color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer}
 .btn-green{background:#43A047}
 
@@ -76,22 +87,29 @@ body{
 .select-wrapper {
   position: relative;
   width: 100%;
-  height: 102px; /* 🔥 altura solicitada */
+  min-height: 40px; /* 🔥 evita clipping */
+  margin-top: 0; /* 🔥 evita recorte inferior */
 }
 
 .select-selected {
-  height: 102px; /* 🔥 misma altura real */
-  padding: 12px 38px 26px 10px; /* 🔥 baja apenas el texto */
-  border: 1px solid #DADAE5;
-  border-radius: 10px;
-  background: #fff;
+  height: 40px; /* 🔥 aumenta para que el borde se vea completo */
+  box-sizing: border-box; /* 🔥 evita que se corte el borde inferior */
+  padding: 0 32px 0 12px; /* 🔥 igual que inputs */
+  border: 1px solid #DADAE5 !important;
+  outline: 1px solid #DADAE5; /* 🔥 garantiza borde visible aunque haya clipping */
+  outline-offset: 0;
+  border-radius: 10px !important;
+  background: #fff !important;
+  background-clip: padding-box; /* 🔥 evita que el fondo tape el borde */
   cursor: pointer;
-  font-size: 11px;
+  font-size: 12px;
   color: #8A8A95;
 
   display: flex;
-  align-items: flex-start; /* 🔥 sube el texto */
+  align-items: center; /* 🔥 centra verticalmente */
   justify-content: flex-start;
+
+  line-height: 1; /* 🔥 evita desfasaje */
 
   text-align: left;
   position: relative;
@@ -117,33 +135,102 @@ body{
 }
 
 .select-items div {
-  min-height: auto; /* 🔥 evita estiramiento */
+  display: block; /* 🔥 elimina layout tipo checkbox */
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #6F6F7B;
+  cursor: pointer;
 }
 
+/* 🔥 ocultar checkboxes si existen */
+.select-items input[type="checkbox"] {
+  display: none;
+}
+
+/* 🔥 texto limpio tipo select */
+.select-items label {
+  cursor: pointer;
+  display: block;
+}
+
+/* 🔥 override total alineación */
+.select-items div * {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+.select-text {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-align: left !important;
+  margin-left: 0; /* 🔥 alinear con inputs */
+}
+/* 🔥 FIX: selects con formato de input (rectángulo) */
+.select-wrapper {
+  min-height: 40px;
+}
+
+.select-selected {
+  height: 40px; /* 🔥 aumenta para que el borde se vea completo */
+  box-shadow: none !important;
+}
+
+/* 🔥 solo eliminar líneas internas, no el borde del select */
+.select-wrapper * {
+  border-bottom: none !important;
+}
+/* 🔥 FIX FINAL select altura */
+.form div > div {
+  display: block;
+  min-height: 40px;
+}
+
+.select-wrapper {
+  width: 100%;
+}
+
+/* The following block removed as per instructions:
+.select-selected {
+  height: 100% !important;
+}
+*/
 </style>
 <style>
 /* 🔥 altura uniforme por componente */
 .input-text-wrapper,
 .input-date-wrapper {
-  height: 40px;
+  height: 40px; /* 🔥 mantener consistencia */
 }
 
 .select-wrapper {
-  height: 102px; /* 🔥 altura consistente */
+  min-height: 40px;
 }
 
 /* asegurar que el contenido ocupe todo el alto */
 .select-selected {
-  height: 100%;
+  height: 40px; /* 🔥 aumenta para que el borde se vea completo */
 }
 
+</style>
+<style>
+
+.select-wrapper {
+  min-height: 40px;
+}
+
+.select-selected {
+  width: 100%;
+}
 
 /* botones alineados */
 #btn-buscar,
 #btn-excel {
   height: 40px;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* 🔥 alinea con parte superior */
+  padding-top: 20px; /* 🔥 bajar un poco más los botones */
 }
 
 #btn-buscar,
@@ -185,7 +272,7 @@ body{
 <div class="form">
 <div><label>Nº Inventario</label><div id="input-inv"></div></div>
 <div><label>Estado</label><div id="select-estado"></div></div>
-<div><label>Ubicación</label><div id="input-ubi"></div></div>
+<div><label>Ubicación</label><div id="select-ubi"></div></div>
 <div><label>Tipo</label><div id="select-tipo"></div></div>
 <div><label>Desde</label><div id="input-desde"></div></div>
 <div><label>Hasta</label><div id="input-hasta"></div></div>
@@ -298,7 +385,7 @@ tbody.appendChild(tr);
 function filtrar(){
 let filtrado = data.filter(d =>
   (!invValor || d.n == invValor) &&
-  (!estadoValor || estadoValor === 'Todos' || d.estado === estadoValor)
+  (!estadoValor || estadoValor === 'Todos' || (Array.isArray(estadoValor) ? estadoValor.includes(d.estado) : d.estado === estadoValor))
 );
 render(filtrado);
 }
@@ -358,6 +445,7 @@ function imprimir(){window.print()}
 </script>
 <script src="../js/input_text.js"></script>
 <script src="../js/select.js"></script>
+<script src="../js/select_mult.js"></script>
 <script src="../js/input_date.js"></script>
 <script src="../js/button_principal.js"></script>
 <script>
@@ -373,25 +461,27 @@ let hastaValor = '';
 const inputInv = crearInput({ placeholder: 'Valor', onChange: v => invValor = v });
 document.getElementById('input-inv').appendChild(inputInv);
 
-const inputUbi = crearInput({ placeholder: 'Valor', onChange: v => ubiValor = v });
-document.getElementById('input-ubi').appendChild(inputUbi);
-
 // Selects
-const selectEstado = crearDesplegable({
-  opciones: ['Todos','Conciliada','Pendiente','Cancelada'],
+select_mult('#select-estado', {
+  options: ['Conciliada','Pendiente','Cancelada'],
   placeholder: 'Todos',
-  multiple: false,
+  multiple: true,
   onChange: v => estadoValor = v
 });
-document.getElementById('select-estado').appendChild(selectEstado);
 
-const selectTipo = crearDesplegable({
-  opciones: ['Todos','Inventario General','Inventario Parcial'],
+select_mult('#select-ubi', {
+  options: ['002','125','171','065','512'],
+  placeholder: 'Seleccionar',
+  multiple: true,
+  onChange: v => ubiValor = v
+});
+
+select_mult('#select-tipo', {
+  options: ['Inventario General','Inventario Parcial'],
   placeholder: 'Todos',
-  multiple: false,
+  multiple: true,
   onChange: v => tipoValor = v
 });
-document.getElementById('select-tipo').appendChild(selectTipo);
 
 // Dates
 const inputDesde = crearInputDate({ onChange: v => desdeValor = v });

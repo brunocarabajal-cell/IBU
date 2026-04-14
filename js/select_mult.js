@@ -12,7 +12,6 @@ function crearDesplegable({
 
   const selected = document.createElement('div');
   selected.className = 'select-selected';
-  selected.style.textAlign = 'left';
   const text = document.createElement('span');
   text.className = 'select-text';
   text.innerText = placeholder;
@@ -25,19 +24,15 @@ function crearDesplegable({
   if (multiple) {
     const selectAll = document.createElement('div');
     selectAll.className = 'select-all-item';
-    selectAll.style.textAlign = 'left';
 
     const checkboxAll = document.createElement('input');
     checkboxAll.type = 'checkbox';
     checkboxAll.className = 'select-checkbox';
-    // 🔥 forzar tamaño pequeño
-    checkboxAll.style.width = '11px';
-    checkboxAll.style.height = '11px';
-    checkboxAll.style.minWidth = '11px';
 
     checkboxAll.addEventListener('click', (e) => e.stopPropagation());
 
     const labelAll = document.createElement('span');
+    labelAll.className = 'select-text';
     labelAll.innerText = 'Seleccionar todos';
 
     selectAll.appendChild(checkboxAll);
@@ -60,9 +55,11 @@ function crearDesplegable({
 
       checkboxAll.checked = valoresSeleccionados.length === opciones.length;
 
-      text.innerText = valoresSeleccionados.length > 0
-        ? valoresSeleccionados.join(', ')
-        : placeholder;
+      text.innerText = valoresSeleccionados.length === 0
+        ? placeholder
+        : valoresSeleccionados.length === 1
+          ? valoresSeleccionados[0]
+          : `${valoresSeleccionados.length} seleccionados`;
 
       if (onChange) onChange(valoresSeleccionados);
     });
@@ -72,27 +69,26 @@ function crearDesplegable({
 
   opciones.forEach(op => {
     const item = document.createElement('div');
-    item.style.textAlign = 'left';
     item.dataset.value = op;
 
     if (multiple) {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.className = 'select-checkbox';
-      // 🔥 forzar tamaño pequeño
-      checkbox.style.width = '11px';
-      checkbox.style.height = '11px';
-      checkbox.style.minWidth = '11px';
 
       checkbox.addEventListener('click', (e) => e.stopPropagation());
 
       const label = document.createElement('span');
+      label.className = 'select-text';
       label.innerText = op;
 
       item.appendChild(checkbox);
       item.appendChild(label);
     } else {
-      item.innerText = op;
+      const label = document.createElement('span');
+      label.className = 'select-text';
+      label.innerText = op;
+      item.appendChild(label);
     }
 
     item.addEventListener('click', (e) => {
@@ -111,9 +107,11 @@ function crearDesplegable({
         const cb = item.querySelector('input.select-checkbox');
         if (cb) cb.checked = valoresSeleccionados.includes(op);
 
-        text.innerText = valoresSeleccionados.length > 0
-          ? valoresSeleccionados.join(', ')
-          : placeholder;
+        text.innerText = valoresSeleccionados.length === 0
+          ? placeholder
+          : valoresSeleccionados.length === 1
+            ? valoresSeleccionados[0]
+            : `${valoresSeleccionados.length} seleccionados`;
 
         if (onChange) onChange(valoresSeleccionados);
 
@@ -205,6 +203,20 @@ function crearDesplegable({
   display: none;
 }
 */
+function select_mult(selector, config) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  const select = crearDesplegable({
+    opciones: config.options || [],
+    placeholder: config.placeholder || 'Seleccionar',
+    onChange: config.onChange || null,
+    multiple: config.multiple || false
+  });
+
+  container.innerHTML = '';
+  container.appendChild(select);
+}
 
 // export opcional
 // export { crearDesplegable };
