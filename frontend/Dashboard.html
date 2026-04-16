@@ -41,6 +41,12 @@
       border:1px solid #E6E6EF;
       position:relative;
       top:40px;
+      cursor:pointer;
+      transition:transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.12);
     }
     .card h4{
       color:#303D9F;
@@ -120,17 +126,17 @@
   <div id="navbar-container"></div>
 
   <div class="dashboard-top">
-    <div class="card">
+    <div class="card" onclick="goInventario()">
       <h4>Inventarios Pendientes</h4>
       <div class="divider"></div>
       <div class="value primary" id="invPendientes"></div>
     </div>
-    <div class="card">
+    <div class="card" onclick="goProrrogas()">
       <h4>Prórrogas Pendientes de Aprobar</h4>
       <div class="divider"></div>
       <div class="value" id="prorrogas"></div>
     </div>
-    <div class="card">
+    <div class="card" onclick="goInventario()">
       <h4>Inventarios Pendientes de Aprobar</h4>
       <div class="divider"></div>
       <div class="value primary" id="invAprobar"></div>
@@ -154,61 +160,101 @@
 
   <script>
     function goInventario(){
-      window.location.href = "inventario.html";
+      window.location.href = "Inventario.html";
     }
     function goProrrogas(){
-      window.location.href = "prorrogas.html";
+      window.location.href = "Prorrogas.html";
     }
     function goUsuarios(){
       window.location.href = "usuarios.html";
     }
-    const state={inventariosPendientes:2,prorrogas:0,inventariosAprobar:1};
 
-    const user=JSON.parse(localStorage.getItem('ibu_user'))||{nombre:'Demo',rol:'Analista',legajo:'000'};
-    // navUser is now inside navbar.js, so no need to set here
+    const state = {
+      inventariosPendientes: 2,
+      prorrogas: 0,
+      inventariosAprobar: 1
+    };
 
-    document.getElementById('invPendientes').innerText=state.inventariosPendientes;
-    document.getElementById('invAprobar').innerText=state.inventariosAprobar;
+    const chartData = [150, 80, 200, 10, 10, 10, 10, 10, 180, 160, 90, 50];
+    const chartLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
-    const pr=document.getElementById('prorrogas');
-    pr.innerText=state.prorrogas;
-    if(state.prorrogas===0) pr.classList.add('gray');
+    const canvas = document.getElementById('grafico');
+    const ctx = canvas.getContext('2d');
 
-    function toggleFiltro(){document.getElementById('filtroBox').classList.toggle('hidden')}
+    function renderDashboard(){
+      document.getElementById('invPendientes').innerText = state.inventariosPendientes;
+      document.getElementById('invAprobar').innerText = state.inventariosAprobar;
 
-    const data=[150,80,200,10,10,10,10,10,180,160,90,50];
-    const labels=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const pr = document.getElementById('prorrogas');
+      pr.innerText = state.prorrogas;
+      pr.classList.toggle('gray', state.prorrogas === 0);
 
-    const canvas=document.getElementById('grafico');
-    const ctx=canvas.getContext('2d');
-    canvas.height = 300;
-    canvas.width = canvas.offsetWidth;
-    const stepX = canvas.width / (data.length + 1);
+      drawChart();
+    }
 
-    const max=Math.max(...data);
+    function toggleFiltro(){
+      document.getElementById('filtroBox').classList.toggle('hidden');
+    }
 
-    ctx.beginPath();
-    data.forEach((val,i)=>{
-      const x=i*stepX+50;
-      const y=250-(val/max*200);
-      if(i===0) ctx.moveTo(x,y);
-      else ctx.lineTo(x,y);
-    });
-    ctx.strokeStyle='#4B4EFC';
-    ctx.lineWidth=2;
-    ctx.stroke();
+    function resizeCanvas(){
+      const ratio = window.devicePixelRatio || 1;
+      const width = canvas.parentElement.clientWidth;
+      canvas.width = width * ratio;
+      canvas.height = 300 * ratio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = '300px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
 
-    data.forEach((val,i)=>{
-      const x=i*stepX+50;
-      const y=250-(val/max*200);
+    function drawChart(){
+      resizeCanvas();
+      const max = Math.max(...chartData);
+      const padding = 40;
+      const chartHeight = 220;
+      const availableWidth = canvas.width / (window.devicePixelRatio || 1) - padding * 2;
+      const stepX = availableWidth / (chartData.length - 1);
+      const baseY = 260;
+      ctx.strokeStyle = '#E8E8F0';
+      ctx.lineWidth = 1;
+
+      for (let i = 0; i <= 5; i++) {
+        const y = baseY - (chartHeight / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(availableWidth + padding, y);
+        ctx.stroke();
+      }
+
       ctx.beginPath();
-      ctx.arc(x,y,4,0,2*Math.PI);
-      ctx.fillStyle='#4B4EFC';
-      ctx.fill();
+      chartData.forEach((value, index) => {
+        const x = padding + stepX * index;
+        const y = baseY - (value / max) * chartHeight;
+        if (index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#4B4EFC';
+      ctx.lineWidth = 3;
+      ctx.stroke();
 
-      ctx.fillStyle='#888';
-      ctx.fillText(labels[i],x-10,280);
-    });
+      chartData.forEach((value, index) => {
+        const x = padding + stepX * index;
+        const y = baseY - (value / max) * chartHeight;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#4B4EFC';
+        ctx.fill();
+
+        ctx.fillStyle = '#444';
+        ctx.font = '12px Lato, sans-serif';
+        ctx.fillText(chartLabels[index], x - 14, baseY + 20);
+      });
+    }
+
+    window.addEventListener('resize', drawChart);
+    renderDashboard();
   </script>
   <div class="footer-line"></div>
   <script src="../js/navbar.js"></script>
