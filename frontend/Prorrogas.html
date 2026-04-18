@@ -6,332 +6,905 @@
 <title>IBU - Prórrogas</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/navbar.css">
-<link rel="stylesheet" href="../css/input_text_styles.css">
 <link rel="stylesheet" href="../css/select_styles.css">
-<link rel="stylesheet" href="../css/button_styles.css">
-<link rel="stylesheet" href="../css/input_date_styles.css">
 <style>
-/* Footer styles moved inside style tag */
-.footer-line{
-  height:40px;
-  background:#303D9F;
-  width:100%;
-  position:fixed;
-  bottom:0;
-  left:0;
-  z-index:999;
-}
-
-body{
-  padding-bottom:50px;
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
-body{background:#F4F4F8;color:#1A1A2E}
-
-/* TOP */
-.top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding-bottom:60px}
-
-/* CARD */
-.card{background:#fff;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
-.title{color:#4B4EFC;font-weight:700}
-.line{height:2px;background:#4B4EFC;margin:12px 0 20px}
-
-.form{display:flex;gap:15px;align-items:end;width:100%}
-.form > div{flex:1}
-
-/* 🔥 inputs más grandes */
-.form > div:nth-child(1){flex:1.5} /* Nº Inventario */
-.form > div:nth-child(2){flex:2}   /* Motivo */
-.form > div:nth-child(3){flex:1.5} /* Fecha */
-
-/* 🔥 botones más chicos */
-#btn-aceptar{flex:0.6}
-#btn-reportes{flex:0.4}
-.form div{display:flex;flex-direction:column;font-size:12px}
-.form div > div{width:100%}
-.form input,.form select{padding:10px;border:1px solid #DADAE5;border-radius:10px}
-.btn{background:#2C3E6B;color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer}
-.btn-green{background:#43A047}
-
-/* TABLE */
-.table-card{background:#DCDDE6;margin:30px;border-radius:16px;padding:24px}
-table{width:100%;border-collapse:collapse}
-th{
-  color:#4B4EFC;
-  font-size:13px;
-  text-align:left;
-  padding:14px;
-  border-bottom:2px solid #4B4EFC;
-}
-td{
-  padding:14px;
-  border-top:1px solid #E6E6EF;
-  font-size:13px;
-}
-.action{background:#2C3E6B;color:#fff;border:none;padding:6px 14px;border-radius:8px}
-
-/* MODAL */
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;justify-content:center;align-items:center}
-.modal-content{
-  background:#fff;
-  width:75%;
-  border-radius:16px;
-  padding:25px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.2);
-}
-.modal-header{display:flex;justify-content:space-between;margin-bottom:25px;padding-bottom:10px;border-bottom:1px solid #E6E6EF}
-.status-green{color:#43A047}
-.status-red{color:#E53935}
-.status-gray{color:#888}
-
-/* New input-gray class */
-.input-gray{
-  width:100%;
-  background:#E6E6EF;
-  border:none;
-  border-radius:8px;
-  padding:8px;
-}
-
-/* Updated select items div for checkbox alignment */
-.select-items div {
-  display: flex;
-  flex-direction: row; /* 🔥 asegurar horizontal */
-  align-items: center;
-  gap: 10px;
-  justify-content: flex-start;
-  text-align: left;
-}
-
-
-.select-items div span {
-  display: inline-block;
-  line-height: 1;
-}
-
-/* 🔥 alinear texto del select como input */
-.select-selected {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: left;
-  padding-left: 12px;
-  padding-top: 12px; /* 🔥 ajuste solicitado */
-}
-
-.select-text {
-  flex: 1;
-  width: 100%; /* 🔥 fuerza ocupar todo el ancho */
-  display: block;
-  text-align: left;
-}
-
-/* 🔥 ocultar dropdown por defecto */
-.select-items {
-  display: none;
-}
-
-.select-items.select-hide {
-  display: none;
-}
-
-.select-items:not(.select-hide) {
-  display: block;
-}
-
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
+  body{background:#F4F4F8;color:#1A1A2E;padding-bottom:56px}
+  .top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding-bottom:56px}
+  .page{padding:0 30px 30px}
+  .card{
+    background:#fff;
+    border-radius:18px;
+    padding:24px 28px;
+    box-shadow:0 10px 28px rgba(26,36,91,0.08);
+  }
+  .hero{margin-top:28px}
+  .title{color:#4B4EFC;font-size:28px;font-weight:700}
+  .subtitle{margin-top:8px;color:#4C5472;font-size:14px}
+  .circuit{
+    margin-top:18px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .step{
+    background:#EEF0FF;
+    color:#32408D;
+    border-radius:12px;
+    padding:10px 14px;
+    font-size:13px;
+    font-weight:600;
+  }
+  .layout{
+    margin-top:24px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+  .section-title{
+    color:#2C3778;
+    font-size:18px;
+    font-weight:700;
+  }
+  .section-subtitle{
+    margin-top:6px;
+    font-size:13px;
+    color:#66708F;
+  }
+  .form-grid{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:minmax(210px,1.4fr) minmax(180px,1fr) minmax(180px,1fr) minmax(260px,1.6fr) auto;
+    gap:14px;
+    align-items:start;
+  }
+  .form-field{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+  }
+  .form-field label{
+    height:16px;
+    display:flex;
+    align-items:center;
+  }
+  .field-note{
+    margin-top:6px;
+    color:#66708F;
+    font-size:12px;
+    min-height:32px;
+    display:flex;
+    align-items:flex-start;
+  }
+  .field-span-2{grid-column:span 2}
+  .action-column{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    align-items:center;
+    align-self:center;
+    grid-column:2 / span 2;
+    height:auto;
+    min-height:0;
+    padding-top:22px;
+  }
+  .action-column .btn{white-space:nowrap}
+  .summary-wide{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(170px,1fr));
+    gap:14px;
+    margin-top:18px;
+  }
+  label{
+    display:block;
+    margin-bottom:6px;
+    color:#4B4EFC;
+    font-size:12px;
+    font-weight:700;
+  }
+  input,textarea{
+    width:100%;
+    border:1px solid #D7DAE8;
+    border-radius:12px;
+    background:#fff;
+    color:#1A1A2E;
+    padding:11px 13px;
+    font-size:14px;
+    outline:none;
+  }
+  input:focus,textarea:focus{
+    border-color:#4B4EFC;
+    box-shadow:0 0 0 3px rgba(75,78,252,0.12);
+  }
+  .motivo-field .select-wrapper{
+    width:100%;
+    height:46px;
+    max-height:none;
+  }
+  .motivo-field .select-selected{
+    height:46px !important;
+    border-radius:12px;
+    border:1px solid #D7DAE8;
+    padding:0 34px 0 13px !important;
+    font-size:14px;
+    color:#1A1A2E;
+    box-shadow:none;
+  }
+  .motivo-field .select-selected.active{
+    border-color:#4B4EFC;
+    box-shadow:0 0 0 3px rgba(75,78,252,0.12);
+  }
+  .motivo-field .select-selected::after{
+    right:14px;
+  }
+  .motivo-field .select-text{
+    color:inherit;
+  }
+  .motivo-field .select-items{
+    border-radius:12px;
+    border:1px solid #D7DAE8;
+    margin-top:6px;
+  }
+  .motivo-field .select-items div{
+    font-size:13px;
+    color:#1A1A2E;
+    padding:10px 13px;
+  }
+  textarea{
+    min-height:96px;
+    resize:vertical;
+  }
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  .btn{
+    border:none;
+    border-radius:12px;
+    padding:11px 16px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:700;
+    transition:transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn:disabled{cursor:not-allowed;opacity:.55;transform:none}
+  .btn-primary{background:#2F3F90;color:#fff;box-shadow:0 10px 20px rgba(47,63,144,0.18)}
+  .btn-secondary{background:#E9ECF9;color:#2F3F90}
+  .btn-approve{background:#2E7D32;color:#fff}
+  .btn-reject{background:#C62828;color:#fff}
+  .btn-cancel{background:#ECEFF6;color:#5E6581}
+  .permission-note{
+    margin-top:12px;
+    background:#F5F7FF;
+    border:1px solid #DDE2FA;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13px;
+    color:#4D5680;
+  }
+  .table-card{margin-top:24px}
+  .table-toolbar{
+    margin-top:18px;
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+    align-items:end;
+  }
+  .toolbar-right{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:end;
+  }
+  .toolbar-field{min-width:220px}
+  .table-wrap{
+    margin-top:18px;
+    overflow:auto;
+    border-radius:14px;
+    border:1px solid #E0E3F1;
+  }
+  table{width:100%;border-collapse:collapse;background:#fff;min-width:1080px}
+  th{
+    text-align:left;
+    padding:14px 16px;
+    font-size:12px;
+    letter-spacing:.03em;
+    color:#4B4EFC;
+    border-bottom:2px solid #4B4EFC;
+    background:#F8F9FE;
+  }
+  td{
+    padding:14px 16px;
+    font-size:13px;
+    border-top:1px solid #ECEEF6;
+    vertical-align:top;
+  }
+  tr:hover td{background:#FAFBFF}
+  .muted{color:#6C7593}
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    border-radius:999px;
+    padding:6px 11px;
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .badge-pendiente-gerencia{background:#FFF0D6;color:#AD6900}
+  .badge-pendiente-aaff{background:#E5F1FF;color:#1765C4}
+  .badge-aprobada{background:#E7F6EA;color:#2E7D32}
+  .badge-rechazada{background:#FCE8E6;color:#C62828}
+  .badge-cancelada{background:#ECEFF6;color:#5E6581}
+  .link-btn{
+    border:none;
+    background:#2F3F90;
+    color:#fff;
+    border-radius:10px;
+    padding:8px 14px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+  }
+  .empty{
+    padding:32px 18px;
+    text-align:center;
+    color:#5F6783;
+    font-size:14px;
+  }
+  .modal{
+    position:fixed;
+    inset:0;
+    background:rgba(20,27,61,0.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:1100;
+  }
+  .modal.open{display:flex}
+  .modal-content{
+    width:min(980px,100%);
+    max-height:92vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 18px 50px rgba(22,27,59,0.24);
+  }
+  .modal-header{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    align-items:flex-start;
+    margin-bottom:18px;
+  }
+  .modal-title{color:#4B4EFC;font-size:24px;font-weight:700}
+  .close{
+    border:none;
+    background:#EEF1FB;
+    color:#2F3F90;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:700;
+  }
+  .summary{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .summary-item{
+    background:#F6F7FC;
+    border-radius:14px;
+    padding:14px;
+  }
+  .summary-item span{
+    display:block;
+    font-size:12px;
+    color:#657091;
+    margin-bottom:4px;
+  }
+  .summary-item strong{
+    color:#1A1A2E;
+    font-size:14px;
+  }
+  .stage-table{
+    width:100%;
+    min-width:100%;
+    border:1px solid #E4E7F4;
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .stage-table th,.stage-table td{padding:13px 14px}
+  .stage-table th{background:#F8F9FE}
+  .modal-actions{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .footer-line{
+    height:40px;
+    background:#303D9F;
+    width:100%;
+    position:fixed;
+    bottom:0;
+    left:0;
+    z-index:999;
+  }
+  @media (max-width: 1180px){
+    .form-grid{
+      grid-template-columns:repeat(2,minmax(220px,1fr));
+    }
+    .field-span-2,
+    .action-column{
+      grid-column:span 2;
+    }
+    .action-column{
+      justify-content:center;
+      padding-top:0;
+    }
+    .summary-wide{
+      grid-template-columns:repeat(2,minmax(170px,1fr));
+    }
+  }
+  @media (max-width: 720px){
+    .form-grid,
+    .summary-wide{
+      grid-template-columns:1fr;
+    }
+    .field-span-2,
+    .action-column{
+      grid-column:auto;
+    }
+    .page{padding:0 18px 24px}
+  }
 </style>
-
 </head>
 <body>
 
 <div class="top">
-<div id="navbar-container"></div>
-
-<div class="card">
-<div class="title">Propuesta de Prórroga</div>
-<div class="line"></div>
-<div class="form">
-<div>
-<label>Nº Inventario</label>
-<div id="input-inv"></div>
-</div>
-<div>
-<label>Motivo</label>
-<div id="select-motivo"></div>
-</div>
-<div>
-<label>Fecha Límite de Prórroga</label>
-<div id="input-fecha"></div>
-</div>
-<div id="btn-aceptar"></div>
-<div id="btn-reportes"></div>
-</div>
-</div>
-</div>
-
-<div class="table-card">
-<table id="tabla">
-<thead>
-<tr>
-<th>Nº</th><th>Fecha</th><th>Fecha Prórroga</th><th>Descripción</th><th>Tipo</th><th>Ubicación</th><th>Motivo</th><th>Solicitante</th><th>Estado</th><th>Acción</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
-
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <div style="font-size:20px;font-weight:700;color:#4B4EFC;margin-bottom:18px;">Detalle Prórroga</div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div style="display:flex;gap:30px;font-size:14px;">
-        <div><b style="color:#4B4EFC">Fecha</b> 20/11/2025</div>
-        <div><b style="color:#4B4EFC">N° Inventario</b> 1</div>
-        <div><b style="color:#4B4EFC">Descripción</b> Inv. General Noviembre</div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <button style="background:#E6E6EF;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;">Cancelar Solicitud</button>
-        <span onclick="cerrar()" style="cursor:pointer;font-weight:bold;">X</span>
+  <div id="navbar-container"></div>
+  <div class="page hero">
+    <div class="card">
+      <div class="title">Gestión de Solicitudes de Prórroga</div>
+      <div class="subtitle">La solicitud la carga Administrativo o Administrativo Predio, luego aprueba Gerencia y finalmente valida Analista de AAFF.</div>
+      <div class="circuit">
+        <div class="step">1. Carga Administrativa</div>
+        <div class="step">2. Aprobación Gerencia</div>
+        <div class="step">3. Aprobación Analista de AAFF</div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div style="background:#F4F4F8;border-radius:14px;padding:20px;">
-      <table>
+<div class="page">
+  <div class="layout">
+    <section class="card">
+      <div class="section-title">Nueva Solicitud</div>
+      <div class="section-subtitle">Completá el inventario visible para tu perfil y registrá la fecha límite solicitada.</div>
+      <form id="formProrroga" class="form-grid">
+        <div class="form-field">
+          <label for="inventarioInput">Inventario</label>
+          <input id="inventarioInput" list="inventariosList" type="text" placeholder="Escribí para buscar un inventario">
+          <datalist id="inventariosList"></datalist>
+          <div class="field-note" id="inventarioHelp">Podés escribir número, ubicación, fecha o tipo.</div>
+        </div>
+        <div class="form-field">
+          <label for="motivoSelect">Motivo</label>
+          <div id="motivoSelect" class="motivo-field"></div>
+        </div>
+        <div class="form-field">
+          <label for="fechaLimiteInput">Fecha Límite de Prórroga</label>
+          <input id="fechaLimiteInput" type="date">
+        </div>
+        <div class="form-field field-span-2">
+          <label for="observacionInput">Observación</label>
+          <textarea id="observacionInput" placeholder="Detalle breve para la solicitud"></textarea>
+        </div>
+        <div class="action-column">
+          <button class="btn btn-primary" type="submit" id="submitButton">Registrar solicitud</button>
+          <button class="btn btn-secondary" type="button" id="exportButton">Exportar listado</button>
+        </div>
+      </form>
+      <div class="permission-note" id="permissionNote"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">Estado del Circuito</div>
+      <div class="section-subtitle">Cada solicitud mantiene su trazabilidad por etapa y respeta visibilidad por ubicación.</div>
+      <div class="summary-wide">
+        <div class="summary-item">
+          <span>Total visibles</span>
+          <strong id="metricTotal">0</strong>
+        </div>
+        <div class="summary-item">
+          <span>Pendiente Gerencia</span>
+          <strong id="metricGerencia">0</strong>
+        </div>
+        <div class="summary-item">
+          <span>Pendiente AAFF</span>
+          <strong id="metricAaff">0</strong>
+        </div>
+        <div class="summary-item">
+          <span>Aprobadas</span>
+          <strong id="metricAprobadas">0</strong>
+        </div>
+      </div>
+    </section>
+
+  <section class="card table-card">
+    <div class="section-title">Solicitudes de Prórroga</div>
+    <div class="section-subtitle">Mostramos sólo los inventarios habilitados para las ubicaciones del usuario actual.</div>
+    <div class="table-toolbar">
+      <div class="toolbar-right">
+        <div class="toolbar-field">
+          <label for="estadoFilter">Estado</label>
+          <select id="estadoFilter">
+            <option value="">Todos</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="tablaProrrogas">
         <thead>
           <tr>
-            <th>N°</th>
-            <th>Participantes</th>
+            <th>Nº</th>
+            <th>Fecha Inventario</th>
+            <th>Fecha Prórroga</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Ubicación</th>
             <th>Motivo</th>
+            <th>Solicitante</th>
             <th>Estado</th>
-            <th>Observaciones</th>
+            <th>Acción</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Solicitante</td>
-            <td>Planificación Erronea</td>
-            <td class="status-green">Aprobada</td>
-            <td><input class="input-gray"></td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Gerencia</td>
-            <td>Planificación Erronea</td>
-            <td class="status-green">Aprobada</td>
-            <td><input class="input-gray" value="Se dejó el inventario para el último día"></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Activos Fijos</td>
-            <td>Planificación Erronea</td>
-            <td class="status-green">Aprobada</td>
-            <td><input class="input-gray" value="Fecha solicitada muy extensa, se otorga plazo hasta el 10/10/2028"></td>
-          </tr>
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
+  </section>
+</div>
 
-    <div style="display:flex;justify-content:center;margin-top:25px;">
-      <button onclick="aprobar()" style="background:#4B4EFC;color:#fff;border:none;padding:10px 32px;border-radius:12px;font-weight:500;cursor:pointer;">Aprobar</button>
+<div class="modal" id="detailModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Detalle de Prórroga</div>
+        <div class="section-subtitle" id="modalSubtitle"></div>
+      </div>
+      <button class="close" type="button" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="summary" id="modalSummary"></div>
+
+    <table class="stage-table">
+      <thead>
+        <tr>
+          <th>Etapa</th>
+          <th>Perfil</th>
+          <th>Participante</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Observación</th>
+        </tr>
+      </thead>
+      <tbody id="modalStages"></tbody>
+    </table>
+
+    <div class="modal-actions">
+      <div id="modalActionNote" class="section-subtitle"></div>
+      <div>
+        <label for="modalObservation">Observación de gestión</label>
+        <textarea id="modalObservation" placeholder="Observación opcional para aprobar, rechazar o cancelar"></textarea>
+      </div>
+      <div class="actions" id="modalButtons"></div>
     </div>
   </div>
 </div>
 
 <script>
-function goInicio(){window.location.href="Dashboard.html"}
-function goInventario(){window.location.href="Inventario.html"}
-function goReportes(){window.location.href="reportes.html"}
-function goUsuarios(){window.location.href="usuarios.html"}
-function goProrrogas(){window.location.href="Prorrogas.html"}
-const data=[
-{n:1,fecha:'20/11/2025',pr:20,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'007',motivo:'Planificación Erronea',sol:'146685',estado:'Pendiente Gcia'},
-{n:65,fecha:'21/11/2025',pr:1,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'007',motivo:'Faltante de Personal',sol:'147585',estado:'Pendiente Gcia'},
-{n:4,fecha:'20/11/2025',pr:2,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'131',motivo:'Complejidad de Análisis',sol:'1458712',estado:'Pendiente AAFF'},
-{n:87,fecha:'20/11/1996',pr:56,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'171',motivo:'Complejidad de Conteo',sol:'45255',estado:'Pendiente AAFF'},
-{n:9,fecha:'20/11/1996',pr:78,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'242',motivo:'Planificación Erronea',sol:'146685',estado:'Pendiente Gcia'},
-{n:120,fecha:'22/11/2025',pr:5,desc:'Inv. PDA',tipo:'Inventario Parcial',ubi:'026',motivo:'Faltante de Personal',sol:'148000',estado:'Pendiente Gcia'},
-{n:121,fecha:'22/11/2025',pr:3,desc:'Inv. Monitores',tipo:'Inventario Parcial',ubi:'131',motivo:'Complejidad de Análisis',sol:'148100',estado:'Pendiente AAFF'}
-];
+function goInicio(){window.location.href='Dashboard.html'}
+function goInventario(){window.location.href='Inventario.html'}
+function goReportes(){window.location.href='reportes.html'}
+function goUsuarios(){window.location.href='usuarios.html'}
+function goProrrogas(){window.location.href='Prorrogas.html'}
 
-function render(){
-const tbody=document.querySelector('#tabla tbody');
-tbody.innerHTML='';
-data.forEach(d=>{
-const tr=document.createElement('tr');
-tr.innerHTML=`<td>${d.n}</td><td>${d.fecha}</td><td>${d.pr}</td><td>${d.desc}</td><td>${d.tipo}</td><td>${d.ubi}</td><td>${d.motivo}</td><td>${d.sol}</td><td>${d.estado}</td><td><button class="action" onclick="abrir()">Ingresar</button></td>`;
-tbody.appendChild(tr);
+const state = {
+  user: null,
+  inventarios: [],
+  motivos: [],
+  estados: [],
+  solicitudes: [],
+  detalleActual: null,
+  inventarioSeleccionado: null,
+  motivoSeleccionado: ''
+};
+
+const API_BASE = 'http://localhost:3000';
+
+function formatDate(value) {
+  if (!value) return 'Sin fecha';
+  if (value.includes('T')) {
+    return new Date(value).toLocaleString('es-AR');
+  }
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('es-AR');
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getBadgeClass(status) {
+  if (status === 'Pendiente Gerencia') return 'badge-pendiente-gerencia';
+  if (status === 'Pendiente AAFF') return 'badge-pendiente-aaff';
+  if (status === 'Aprobada') return 'badge-aprobada';
+  if (status === 'Rechazada') return 'badge-rechazada';
+  if (status === 'Cancelada') return 'badge-cancelada';
+  return 'badge-cancelada';
+}
+
+function authHeaders(extra = {}) {
+  const headers = { 'Content-Type': 'application/json', ...extra };
+  if (state.user?.legajo) {
+    headers['X-User-Legajo'] = state.user.legajo;
+  }
+  return headers;
+}
+
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || 'No se pudo completar la operación');
+  }
+  return data;
+}
+
+function getCreatePermissionMessage() {
+  if (!state.user) return 'Iniciá sesión para operar sobre solicitudes.';
+  if (['Administrativo', 'Administrativo Predio'].includes(state.user.perfil)) {
+    return 'Podés cargar nuevas solicitudes para las ubicaciones que tengas asignadas.';
+  }
+  if (state.user.perfil === 'Gerencia') {
+    return 'Podés revisar y aprobar solicitudes pendientes de Gerencia dentro de tus ubicaciones.';
+  }
+  if (state.user.perfil === 'Analista de AAFF') {
+    return 'Podés visualizar todas las ubicaciones y cerrar la aprobación final del circuito.';
+  }
+  return 'Este perfil sólo puede consultar solicitudes visibles según sus ubicaciones habilitadas.';
+}
+
+function resolveInventarioSelection(rawValue) {
+  const normalized = (rawValue || '').trim().toLowerCase();
+  if (!normalized) return null;
+
+  const exactLabel = state.inventarios.find(item => item.etiqueta.toLowerCase() === normalized);
+  if (exactLabel) return exactLabel;
+
+  const exactInventory = state.inventarios.filter(item => String(item.numeroInventario).toLowerCase() === normalized);
+  if (exactInventory.length === 1) {
+    return exactInventory[0];
+  }
+
+  return null;
+}
+
+function updateInventarioHelp() {
+  const input = document.getElementById('inventarioInput');
+  const help = document.getElementById('inventarioHelp');
+  const selected = resolveInventarioSelection(input.value);
+  state.inventarioSeleccionado = selected;
+
+  if (!input.value.trim()) {
+    help.textContent = 'Podés escribir número, ubicación, fecha o tipo.';
+    return;
+  }
+
+  if (selected) {
+    help.textContent = `Seleccionado: ${selected.etiqueta}`;
+    return;
+  }
+
+  const matches = state.inventarios.filter(item => item.etiqueta.toLowerCase().includes(input.value.trim().toLowerCase()));
+  if (matches.length > 1) {
+    help.textContent = 'Hay más de un inventario coincidente. Elegí una opción sugerida para identificarlo bien.';
+    return;
+  }
+
+  help.textContent = 'No encontramos un inventario exacto con ese valor.';
+}
+
+function renderForm() {
+  const inventariosList = document.getElementById('inventariosList');
+  inventariosList.innerHTML = '';
+  state.inventarios.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item.etiqueta;
+    inventariosList.appendChild(option);
+  });
+
+  const motivoSelect = document.getElementById('motivoSelect');
+  motivoSelect.innerHTML = '';
+  state.motivoSeleccionado = '';
+  motivoSelect.appendChild(crearDesplegable({
+    opciones: state.motivos,
+    placeholder: 'Seleccionar motivo',
+    multiple: false,
+    onChange: value => {
+      state.motivoSeleccionado = value || '';
+    }
+  }));
+
+  const canCreate = ['Administrativo', 'Administrativo Predio'].includes(state.user?.perfil);
+  ['inventarioInput', 'fechaLimiteInput', 'observacionInput', 'submitButton']
+    .forEach(id => {
+      document.getElementById(id).disabled = !canCreate;
+    });
+  const motivoVisual = motivoSelect.querySelector('.select-selected');
+  if (motivoVisual) {
+    motivoVisual.classList.toggle('disabled', !canCreate);
+    motivoVisual.style.pointerEvents = canCreate ? 'auto' : 'none';
+    motivoVisual.style.opacity = canCreate ? '1' : '0.55';
+  }
+
+  document.getElementById('inventarioInput').value = '';
+  state.inventarioSeleccionado = null;
+  updateInventarioHelp();
+  document.getElementById('permissionNote').textContent = getCreatePermissionMessage();
+}
+
+function renderEstadoFilter() {
+  const estadoFilter = document.getElementById('estadoFilter');
+  const currentValue = estadoFilter.value;
+  estadoFilter.innerHTML = '<option value="">Todos</option>';
+  state.estados.forEach(estado => {
+    const option = document.createElement('option');
+    option.value = estado;
+    option.textContent = estado;
+    estadoFilter.appendChild(option);
+  });
+  estadoFilter.value = currentValue;
+}
+
+function renderMetrics() {
+  const total = state.solicitudes.length;
+  const pendientesGerencia = state.solicitudes.filter(item => item.estado === 'Pendiente Gerencia').length;
+  const pendientesAaff = state.solicitudes.filter(item => item.estado === 'Pendiente AAFF').length;
+  const aprobadas = state.solicitudes.filter(item => item.estado === 'Aprobada').length;
+
+  document.getElementById('metricTotal').textContent = total;
+  document.getElementById('metricGerencia').textContent = pendientesGerencia;
+  document.getElementById('metricAaff').textContent = pendientesAaff;
+  document.getElementById('metricAprobadas').textContent = aprobadas;
+}
+
+function renderTable() {
+  const tbody = document.querySelector('#tablaProrrogas tbody');
+  tbody.innerHTML = '';
+
+  if (state.solicitudes.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">No hay solicitudes para los filtros seleccionados.</td></tr>';
+    return;
+  }
+
+  state.solicitudes.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escapeHtml(item.numeroInventario)}</td>
+      <td>${escapeHtml(formatDate(item.fechaInventario))}</td>
+      <td>${escapeHtml(formatDate(item.fechaLimiteProrroga))}</td>
+      <td>${escapeHtml(item.descripcion || '-')}</td>
+      <td>${escapeHtml(item.tipo || '-')}</td>
+      <td>${escapeHtml(item.ubicacion)}</td>
+      <td>${escapeHtml(item.motivo)}</td>
+      <td>
+        <div>${escapeHtml(item.solicitanteNombre || '-')}</div>
+        <div class="muted">${escapeHtml(item.solicitantePerfil || '')}</div>
+      </td>
+      <td><span class="badge ${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+      <td><button class="link-btn" type="button" onclick="openDetail(${item.id})">Ingresar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderModal(detail) {
+  document.getElementById('modalSubtitle').textContent = `${detail.numeroInventario} | ${detail.ubicacion} | ${detail.tipo || 'Sin tipo'}`;
+  document.getElementById('modalSummary').innerHTML = `
+    <div class="summary-item"><span>Fecha Inventario</span><strong>${escapeHtml(formatDate(detail.fechaInventario))}</strong></div>
+    <div class="summary-item"><span>Fecha Prórroga</span><strong>${escapeHtml(formatDate(detail.fechaLimiteProrroga))}</strong></div>
+    <div class="summary-item"><span>Estado</span><strong>${escapeHtml(detail.estado)}</strong></div>
+    <div class="summary-item"><span>Motivo</span><strong>${escapeHtml(detail.motivo)}</strong></div>
+    <div class="summary-item"><span>Descripción</span><strong>${escapeHtml(detail.descripcion || '-')}</strong></div>
+    <div class="summary-item"><span>Solicitante</span><strong>${escapeHtml(detail.solicitanteNombre || '-')}</strong></div>
+  `;
+
+  document.getElementById('modalStages').innerHTML = detail.etapas.map(stage => `
+    <tr>
+      <td>${stage.orden}</td>
+      <td>${escapeHtml(stage.perfil)}</td>
+      <td>${escapeHtml(stage.nombre)}</td>
+      <td><span class="badge ${getBadgeClass(stage.estado === 'Pendiente' ? detail.estado : stage.estado)}">${escapeHtml(stage.estado)}</span></td>
+      <td>${escapeHtml(formatDate(stage.fecha))}</td>
+      <td>${escapeHtml(stage.observacion || '-')}</td>
+    </tr>
+  `).join('');
+
+  const note = [];
+  if (detail.permisos.puedeAprobar) {
+    note.push('Tenés permiso para resolver la etapa actual.');
+  }
+  if (detail.permisos.puedeCancelar) {
+    note.push('También podés cancelar la solicitud mientras no esté cerrada.');
+  }
+  document.getElementById('modalActionNote').textContent = note.join(' ');
+
+  const buttons = [];
+  if (detail.permisos.puedeAprobar) {
+    buttons.push('<button class="btn btn-approve" type="button" onclick="submitDetailAction(\'aprobar\')">Aprobar</button>');
+  }
+  if (detail.permisos.puedeRechazar) {
+    buttons.push('<button class="btn btn-reject" type="button" onclick="submitDetailAction(\'rechazar\')">Rechazar</button>');
+  }
+  if (detail.permisos.puedeCancelar) {
+    buttons.push('<button class="btn btn-cancel" type="button" onclick="submitDetailAction(\'cancelar\')">Cancelar solicitud</button>');
+  }
+  document.getElementById('modalButtons').innerHTML = buttons.join('');
+  document.getElementById('modalObservation').value = '';
+  document.getElementById('detailModal').classList.add('open');
+}
+
+async function loadSolicitudes() {
+  const estado = document.getElementById('estadoFilter').value;
+  const query = estado ? `?estado=${encodeURIComponent(estado)}` : '';
+  state.solicitudes = await fetchJson(`${API_BASE}/prorrogas${query}`, {
+    headers: authHeaders()
+  });
+  renderMetrics();
+  renderTable();
+}
+
+async function loadInitialData() {
+  const [filtros] = await Promise.all([
+    fetchJson(`${API_BASE}/prorrogas/filtros`, { headers: authHeaders() })
+  ]);
+
+  state.inventarios = filtros.inventarios || [];
+  state.motivos = filtros.motivos || [];
+  state.estados = filtros.estados || [];
+
+  renderForm();
+  renderEstadoFilter();
+  await loadSolicitudes();
+}
+
+async function openDetail(id) {
+  const detail = await fetchJson(`${API_BASE}/prorrogas/${id}`, {
+    headers: authHeaders()
+  });
+  state.detalleActual = detail;
+  renderModal(detail);
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('open');
+  state.detalleActual = null;
+}
+
+async function submitDetailAction(action) {
+  if (!state.detalleActual) return;
+  const observacion = document.getElementById('modalObservation').value.trim();
+  await fetchJson(`${API_BASE}/prorrogas/${state.detalleActual.id}/${action}`, {
+    method: 'PUT',
+    headers: authHeaders(),
+    body: JSON.stringify({ observacion })
+  });
+  closeModal();
+  await loadInitialData();
+}
+
+function exportSolicitudes() {
+  const headers = ['Numero Inventario', 'Fecha Inventario', 'Fecha Prorroga', 'Descripcion', 'Tipo', 'Ubicacion', 'Motivo', 'Solicitante', 'Estado'];
+  const rows = state.solicitudes.map(item => [
+    item.numeroInventario,
+    formatDate(item.fechaInventario),
+    formatDate(item.fechaLimiteProrroga),
+    item.descripcion || '',
+    item.tipo || '',
+    item.ubicacion || '',
+    item.motivo || '',
+    item.solicitanteNombre || '',
+    item.estado || ''
+  ]);
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(';'))
+    .join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'prorrogas.csv';
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+document.getElementById('formProrroga').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const inventario = resolveInventarioSelection(document.getElementById('inventarioInput').value);
+  const motivo = state.motivoSeleccionado;
+  const fechaLimiteProrroga = document.getElementById('fechaLimiteInput').value;
+  const observacion = document.getElementById('observacionInput').value.trim();
+
+  if (!inventario || !motivo || !fechaLimiteProrroga) {
+    alert('Completá inventario, motivo y fecha límite para registrar la solicitud.');
+    return;
+  }
+  await fetchJson(`${API_BASE}/prorrogas`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({
+      numeroInventario: inventario.numeroInventario,
+      fechaInventario: inventario.fechaInventario,
+      ubicacion: inventario.ubicacion,
+      tipo: inventario.tipo,
+      motivo,
+      fechaLimiteProrroga,
+      observacion
+    })
+  });
+
+  event.target.reset();
+  await loadInitialData();
 });
-}
 
-function agregar(){
-data.push({n:data.length+1,fecha:'Hoy',pr:0,desc:'Nueva',tipo:'Inventario General',ubi:'007',motivo: motivoValor,sol:'000',estado:'Pendiente Gcia'});
-render();
-}
+document.getElementById('estadoFilter').addEventListener('change', loadSolicitudes);
+document.getElementById('inventarioInput').addEventListener('input', updateInventarioHelp);
+document.getElementById('inventarioInput').addEventListener('change', updateInventarioHelp);
+document.getElementById('exportButton').addEventListener('click', exportSolicitudes);
+document.getElementById('detailModal').addEventListener('click', event => {
+  if (event.target.id === 'detailModal') {
+    closeModal();
+  }
+});
 
-function abrir(){document.getElementById('modal').style.display='flex'}
-function cerrar(){document.getElementById('modal').style.display='none'}
-function aprobar(){alert('Aprobado');cerrar()}
+(async function init() {
+  const rawUser = localStorage.getItem('ibu_user');
+  if (!rawUser) {
+    window.location.href = 'Login.html';
+    return;
+  }
 
-render();
+  const sessionUser = JSON.parse(rawUser);
+  try {
+    state.user = await fetchJson(`${API_BASE}/usuarios/${encodeURIComponent(sessionUser.legajo)}`);
+    localStorage.setItem('ibu_user', JSON.stringify(state.user));
+    await loadInitialData();
+  } catch (error) {
+    alert(error.message);
+  }
+})();
 </script>
+<script src="../js/select.js"></script>
 <script src="../js/navbar.js"></script>
 <script>
   cargarUsuario('prorrogas');
-</script>
-<script src="../js/input_text.js"></script>
-<script src="../js/select.js"></script>
-<script src="../js/input_date.js"></script>
-<script src="../js/button_principal.js"></script>
-<script>
-  // 🎯 Estado
-  let invValor = '';
-  let motivoValor = '';
-  let fechaValor = '';
-
-  // 🎯 Input Nº Inventario
-  const inputInv = crearInput({
-    placeholder: 'Valor',
-    onChange: (v)=> invValor = v
-  });
-  document.getElementById('input-inv').appendChild(inputInv);
-
-  // 🎯 Select Motivo
-  const selectMotivo = crearDesplegable({
-    opciones: ['Planificación Erronea','Faltante de Personal','Complejidad de Análisis','Complejidad de Conteo'],
-    placeholder: 'Seleccionar',
-    multiple: false,
-    onChange: (v)=> motivoValor = v
-  });
-  document.getElementById('select-motivo').appendChild(selectMotivo);
-
-  // 🎯 Input Fecha
-  const inputFecha = crearInputDate({
-    value: '',
-    onChange: (v)=> fechaValor = v
-  });
-  document.getElementById('input-fecha').appendChild(inputFecha);
-
-  // 🎯 Botón Aceptar
-  const btnAceptar = crearBotonPrincipal({
-    texto: 'Aceptar',
-    onClick: ()=> agregar()
-  });
-  document.getElementById('btn-aceptar').appendChild(btnAceptar);
-
-  // 🎯 Botón Reportes
-  const btnReportes = crearBotonPrincipal({
-    texto: '',
-    onClick: ()=> {}
-  });
-  // 🔥 agregar imagen excel
-  const imgExcel = document.createElement('img');
-  imgExcel.src = '../assets/excel.png';
-  imgExcel.style.width = '18px';
-  imgExcel.style.height = '18px';
-  btnReportes.appendChild(imgExcel);
-  document.getElementById('btn-reportes').appendChild(btnReportes);
 </script>
 
 <div class="footer-line"></div>

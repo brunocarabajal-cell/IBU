@@ -7,11 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/navbar.css">
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Lato', sans-serif}
-    body{background:#F4F4F8;color:#1A1A2E}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
+    body{background:#EEF1F7;color:#1A1A2E;padding-bottom:72px}
 
-
-    /* FIX NAVBAR FULL WIDTH */
     #navbar-container .top-section{
       padding:0 !important;
       display:block !important;
@@ -23,94 +21,285 @@
       border-bottom:1px solid rgba(255,255,255,0.25);
     }
 
-    .dashboard-top{
-      background:linear-gradient(90deg,#4B4EFC,#5A5DFD);
-      padding:0 30px 80px;
-      display:flex;
-      gap:20px;
+    .hero{
+      background:linear-gradient(135deg,#3943D7 0%,#5F68FF 58%,#7B83FF 100%);
+      padding:0 30px 110px;
       margin-top:-1px;
+      position:relative;
+      overflow:hidden;
     }
 
-    .card{
-      background:#F7F7FB;
-      padding: 46px 26px;
-      min-height: 150px;
-      border-radius:14px;
-      flex:1;
-      box-shadow:0 4px 12px rgba(0,0,0,0.08);
-      border:1px solid #E6E6EF;
-      position:relative;
+    .hero::after{
+      content:'';
+      position:absolute;
+      right:-120px;
       top:40px;
-      cursor:pointer;
-      transition:transform 0.2s ease, box-shadow 0.2s ease;
+      width:340px;
+      height:340px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.08);
+      filter:blur(2px);
     }
-    .card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 8px 24px rgba(0,0,0,0.12);
+
+    .hero-header{
+      position:relative;
+      z-index:1;
+      color:#fff;
+      padding-top:28px;
+      max-width:720px;
     }
-    .card h4{
-      color:#303D9F;
-      margin-bottom:8px;
-      font-weight:600;
-      font-size:15px;
-    }
-    .card .divider{
-      height:2px;
-      background:#303D9F;
-      margin:8px 0 18px;
-      width:100%;
-    }
-    .value{
-      font-size:48px;
-      font-weight:700;
-    }
-    .card .value{
-      margin-top:10px;
-    }
-    .primary{color:#4B4EFC}
-    .gray{color:#888}
-    .results{
-      padding:60px 30px 30px;
-      background:#F4F4F8;
-      padding-bottom:80px;
-    }
-    .results-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+
+    .eyebrow{
+      font-size:12px;
+      letter-spacing:1.3px;
+      text-transform:uppercase;
+      opacity:0.82;
       margin-bottom:10px;
     }
-    .results-header h2{
-      color:#303D9F;
-      font-size:16px;
-    }
-    .results-line{
-      height:2px;
-      background:#303D9F;
-      width:100%;
-      margin-bottom:20px;
+
+    .hero h1{
+      font-size:34px;
+      line-height:1.15;
+      font-weight:700;
     }
 
-    .filtro{margin-top:10px;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fafafa}
-    .hidden{display:none}
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:18px;
+      margin-top:-62px;
+      padding:0 30px;
+      position:relative;
+      z-index:2;
+    }
 
-    .filtro-btn{
-      background:#ddd;
-      border:none;
-      padding:5px 10px;
-      border-radius:6px;
-      font-size:12px;
+    .stat-card{
+      background:#F9FAFD;
+      border:1px solid #DFE4F1;
+      border-radius:18px;
+      padding:22px 22px 20px;
+      box-shadow:0 14px 34px rgba(41,53,108,0.12);
+      min-height:160px;
       cursor:pointer;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 18px 38px rgba(41,53,108,0.18);
+    }
+
+    .stat-label{
+      color:#5C6382;
+      font-size:13px;
+      margin-bottom:16px;
+    }
+
+    .stat-value{
+      color:#3340D6;
+      font-size:42px;
+      font-weight:700;
+      line-height:1;
+      margin-bottom:10px;
+    }
+
+    .stat-note{
+      color:#6F7694;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .content{
+      padding:28px 30px 0;
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(320px,.95fr);
+      gap:22px;
+    }
+
+    .panel{
+      background:#FAFBFE;
+      border:1px solid #DFE4F1;
+      border-radius:18px;
+      box-shadow:0 10px 26px rgba(41,53,108,0.08);
+      overflow:hidden;
+    }
+
+    .panel-header{
+      padding:22px 24px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+    }
+
+    .panel-title{
+      color:#303D9F;
+      font-size:18px;
+      font-weight:700;
+      margin-bottom:5px;
+    }
+
+    .panel-subtitle{
+      color:#6F7694;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .panel-action{
+      border:none;
+      background:#E8EBFF;
+      color:#3340D6;
+      font-weight:700;
+      font-size:12px;
+      border-radius:999px;
+      padding:10px 14px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .panel-controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .year-filter{
+      height:38px;
+      border:1px solid #D8DEF0;
+      border-radius:999px;
+      background:#fff;
+      color:#3340D6;
+      padding:0 14px;
+      font-size:12px;
+      font-weight:700;
+      outline:none;
+    }
+
+    .chart-wrap{
+      padding:0 16px 18px;
     }
 
     canvas{
-      margin-top:20px;
-      background:#fff;
-      border-radius:12px;
-      box-shadow:0 6px 15px rgba(0,0,0,0.08);
       width:100%;
-      height:300px;
+      height:320px;
+      display:block;
+      background:linear-gradient(180deg,#FFFFFF 0%,#F6F8FF 100%);
+      border-radius:16px;
     }
+
+    .summary-list{
+      padding:0 24px 22px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .mini-card{
+      background:#F0F3FF;
+      border-radius:14px;
+      padding:16px;
+    }
+
+    .mini-card strong{
+      display:block;
+      color:#303D9F;
+      font-size:24px;
+      margin-bottom:6px;
+    }
+
+    .mini-card span{
+      color:#6F7694;
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    .report-list{
+      padding:0 18px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .report-item{
+      background:#F4F6FC;
+      border:1px solid #E3E7F2;
+      border-radius:16px;
+      padding:16px;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-start;
+    }
+
+    .report-main{
+      min-width:0;
+    }
+
+    .report-code{
+      color:#303D9F;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.6px;
+      margin-bottom:8px;
+    }
+
+    .report-title{
+      color:#1D2340;
+      font-size:15px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+
+    .report-meta{
+      color:#6F7694;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .report-side{
+      text-align:right;
+      min-width:92px;
+    }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .status-completo{background:#E4F5E8;color:#2E7D32}
+    .status-pendiente{background:#FFF2DB;color:#E58A00}
+    .status-prorroga{background:#FFF2DB;color:#E58A00}
+    .status-reclamado{background:#FCE3E3;color:#D84343}
+    .status-default{background:#E9EDF5;color:#69728C}
+
+    .diff{
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .diff-pos{color:#2E7D32}
+    .diff-neg{color:#D84343}
+    .diff-zero{color:#7A819E}
+
+    .empty-state{
+      padding:28px 24px;
+      color:#6F7694;
+      font-size:14px;
+    }
+
+    .loading{
+      padding:18px 30px 0;
+      color:#5C6382;
+      font-size:13px;
+    }
+
     .footer-line{
       height:40px;
       background:#303D9F;
@@ -119,143 +308,407 @@
       bottom:0;
       left:0;
     }
+
+    @media (max-width: 1100px){
+      .stats-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .content{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 700px){
+      .hero{
+        padding:0 18px 96px;
+      }
+
+      .hero h1{
+        font-size:28px;
+      }
+
+      .stats-grid,
+      .content,
+      .loading{
+        padding-left:18px;
+        padding-right:18px;
+      }
+
+      .stats-grid{
+        grid-template-columns:1fr;
+        margin-top:-52px;
+      }
+
+      .summary-list{
+        grid-template-columns:1fr;
+      }
+
+      .panel-header,
+      .report-item{
+        flex-direction:column;
+      }
+
+      .report-side{
+        text-align:left;
+      }
+    }
   </style>
 </head>
 <body>
-
   <div id="navbar-container"></div>
 
-  <div class="dashboard-top">
-    <div class="card" onclick="goInventario()">
-      <h4>Inventarios Pendientes</h4>
-      <div class="divider"></div>
-      <div class="value primary" id="invPendientes"></div>
+  <section class="hero">
+    <div class="hero-header">
+      <div class="eyebrow">Panel de inicio</div>
+      <h1>Resumen de Actividades</h1>
     </div>
-    <div class="card" onclick="goProrrogas()">
-      <h4>Prórrogas Pendientes de Aprobar</h4>
-      <div class="divider"></div>
-      <div class="value" id="prorrogas"></div>
-    </div>
-    <div class="card" onclick="goInventario()">
-      <h4>Inventarios Pendientes de Aprobar</h4>
-      <div class="divider"></div>
-      <div class="value primary" id="invAprobar"></div>
-    </div>
-  </div>
+  </section>
 
-  <div class="results">
-    <div class="results-header">
-      <h2>Resultados</h2>
-      <button class="filtro-btn" onclick="toggleFiltro()">Filtro</button>
+  <div class="loading" id="loading-text">Cargando resumen real de inventarios...</div>
+
+  <section class="stats-grid">
+    <article class="stat-card" onclick="goReportes()">
+      <div class="stat-label">Reportes pendientes</div>
+      <div class="stat-value" id="metricPendientes">-</div>
+      <div class="stat-note">Reportes que todavía requieren seguimiento operativo.</div>
+    </article>
+    <article class="stat-card" onclick="goProrrogas()">
+      <div class="stat-label">Prórrogas detectadas</div>
+      <div class="stat-value" id="metricProrrogas">-</div>
+      <div class="stat-note">Casos con extensión marcada en la base inicial.</div>
+    </article>
+    <article class="stat-card" onclick="goReportes()">
+      <div class="stat-label">Reportes completos</div>
+      <div class="stat-value" id="metricCompletos">-</div>
+      <div class="stat-note">Inventarios cerrados y visibles en la consulta histórica.</div>
+    </article>
+    <article class="stat-card" onclick="goReportes()">
+      <div class="stat-label">Con diferencias</div>
+      <div class="stat-value" id="metricDiferencias">-</div>
+      <div class="stat-note">Reportes donde el físico no coincide con el teórico.</div>
+    </article>
+  </section>
+
+  <section class="content">
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Evolucion de Inventarios Mensuales</div>
+          <div class="panel-subtitle">Resultado final de inventarios completados agrupado por mes</div>
+        </div>
+        <div class="panel-controls">
+          <select class="year-filter" id="yearFilter"></select>
+          <button class="panel-action" onclick="goReportes()">Ir a reportes</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="grafico"></canvas>
+      </div>
+      <div class="summary-list">
+        <div class="mini-card">
+          <strong id="metricTotal">-</strong>
+          <span>Total de reportes históricos disponibles en la base actual.</span>
+        </div>
+        <div class="mini-card">
+          <strong id="metricUltimoMes">-</strong>
+          <span>Resultado final registrado en el mes más reciente con actividad.</span>
+        </div>
+      </div>
     </div>
-    <div class="results-line"></div>
-    <div id="filtroBox" class="filtro hidden">
-      <label>Año:</label>
-      <select><option>2025</option><option>2026</option></select>
-      <label>Mes:</label>
-      <select><option>Todos</option><option>Enero</option></select>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Últimos reportes cargados</div>
+          <div class="panel-subtitle">Muestra operativa de los registros más recientes para seguimiento rápido.</div>
+        </div>
+      </div>
+      <div class="report-list" id="reportList">
+        <div class="empty-state">Todavía no hay datos para mostrar.</div>
+      </div>
     </div>
-    <canvas id="grafico"></canvas>
-  </div>
+  </section>
 
   <script>
-    function goInventario(){
-      window.location.href = "Inventario.html";
-    }
-    function goProrrogas(){
-      window.location.href = "Prorrogas.html";
-    }
-    function goUsuarios(){
-      window.location.href = "usuarios.html";
-    }
-
-    const state = {
-      inventariosPendientes: 2,
-      prorrogas: 0,
-      inventariosAprobar: 1
-    };
-
-    const chartData = [150, 80, 200, 10, 10, 10, 10, 10, 180, 160, 90, 50];
-    const chartLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-
+    const API_BASE = 'http://127.0.0.1:3000';
     const canvas = document.getElementById('grafico');
     const ctx = canvas.getContext('2d');
+    let dashboardData = { metricas: {}, ultimosReportes: [], evolucionMensual: [] };
+    let selectedYear = 'Todos';
 
-    function renderDashboard(){
-      document.getElementById('invPendientes').innerText = state.inventariosPendientes;
-      document.getElementById('invAprobar').innerText = state.inventariosAprobar;
-
-      const pr = document.getElementById('prorrogas');
-      pr.innerText = state.prorrogas;
-      pr.classList.toggle('gray', state.prorrogas === 0);
-
-      drawChart();
+    function authHeaders() {
+      try {
+        const user = JSON.parse(localStorage.getItem('ibu_user')) || {};
+        return user.legajo ? { 'X-User-Legajo': String(user.legajo) } : {};
+      } catch (error) {
+        return {};
+      }
     }
 
-    function toggleFiltro(){
-      document.getElementById('filtroBox').classList.toggle('hidden');
+    function goInventario(){
+      window.location.href = 'Inventario.html';
     }
 
-    function resizeCanvas(){
+    function goProrrogas(){
+      window.location.href = 'Prorrogas.html';
+    }
+
+    function goUsuarios(){
+      window.location.href = 'usuarios.html';
+    }
+
+    function goReportes(){
+      window.location.href = 'reportes.html';
+    }
+
+    function formatPeriodo(periodo) {
+      if (!periodo) return '-';
+      const [year, month] = periodo.split('-');
+      const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      const idx = Number(month) - 1;
+      return idx >= 0 ? `${monthNames[idx]} ${year}` : periodo;
+    }
+
+    function formatFecha(value) {
+      if (!value) return '-';
+      const fecha = new Date(`${value}T00:00:00`);
+      return Number.isNaN(fecha.getTime()) ? value : fecha.toLocaleDateString('es-AR');
+    }
+
+    function statusClass(status) {
+      if (status === 'Completo') return 'status-completo';
+      if (status === 'Pendiente') return 'status-pendiente';
+      if (status === 'Prórroga') return 'status-prorroga';
+      if (status === 'Reclamado') return 'status-reclamado';
+      return 'status-default';
+    }
+
+    function diffClass(value) {
+      if (value > 0) return 'diff-pos';
+      if (value < 0) return 'diff-neg';
+      return 'diff-zero';
+    }
+
+    function renderMetrics() {
+      const metricas = dashboardData.metricas || {};
+      document.getElementById('metricPendientes').innerText = metricas.pendientes ?? 0;
+      document.getElementById('metricProrrogas').innerText = metricas.prorrogas ?? 0;
+      document.getElementById('metricCompletos').innerText = metricas.completos ?? 0;
+      document.getElementById('metricDiferencias').innerText = metricas.conDiferencias ?? 0;
+      document.getElementById('metricTotal').innerText = metricas.totalReportes ?? 0;
+
+      const serieFiltrada = getFilteredSeries();
+      const ultimoMes = serieFiltrada.length
+        ? serieFiltrada[serieFiltrada.length - 1].total
+        : 0;
+      document.getElementById('metricUltimoMes').innerText = ultimoMes;
+    }
+
+    function renderYearFilter() {
+      const select = document.getElementById('yearFilter');
+      const years = [...new Set((dashboardData.evolucionMensual || []).map(item => item.periodo.split('-')[0]))].sort();
+      select.innerHTML = '';
+
+      const allOption = document.createElement('option');
+      allOption.value = 'Todos';
+      allOption.textContent = 'Todos los años';
+      select.appendChild(allOption);
+
+      years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        select.appendChild(option);
+      });
+
+      select.value = years.includes(selectedYear) ? selectedYear : 'Todos';
+    }
+
+    function getFilteredSeries() {
+      const serie = dashboardData.evolucionMensual || [];
+      if (selectedYear === 'Todos') return serie;
+      return serie.filter(item => item.periodo.startsWith(`${selectedYear}-`));
+    }
+
+    function renderLatestReports() {
+      const container = document.getElementById('reportList');
+      const rows = dashboardData.ultimosReportes || [];
+
+      if (rows.length === 0) {
+        container.innerHTML = '<div class="empty-state">No se encontraron reportes recientes.</div>';
+        return;
+      }
+
+      container.innerHTML = rows.map(row => `
+        <article class="report-item" onclick="goReportes()">
+          <div class="report-main">
+            <div class="report-code">INV ${row.numero_inventario}</div>
+            <div class="report-title">${row.ubicacion} · ${row.tipo}</div>
+            <div class="report-meta">${formatFecha(row.fecha_inventario)} · ${row.cantidad_clases} clases relevadas</div>
+          </div>
+          <div class="report-side">
+            <div class="status-badge ${statusClass(row.estado_resumen)}">${row.estado_resumen}</div>
+            <div class="diff ${diffClass(row.diferencia_total)}">Dif. ${row.diferencia_total}</div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function resizeCanvas() {
       const ratio = window.devicePixelRatio || 1;
       const width = canvas.parentElement.clientWidth;
+      const height = width < 700 ? 280 : 320;
       canvas.width = width * ratio;
-      canvas.height = 300 * ratio;
-      canvas.style.width = width + 'px';
-      canvas.style.height = '300px';
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.height = height * ratio;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      return { width, height };
     }
 
-    function drawChart(){
-      resizeCanvas();
-      const max = Math.max(...chartData);
-      const padding = 40;
-      const chartHeight = 220;
-      const availableWidth = canvas.width / (window.devicePixelRatio || 1) - padding * 2;
-      const stepX = availableWidth / (chartData.length - 1);
-      const baseY = 260;
-      ctx.strokeStyle = '#E8E8F0';
-      ctx.lineWidth = 1;
+    function formatAxisValue(value) {
+      if (Math.abs(value) >= 1000) {
+        return value.toLocaleString('es-AR');
+      }
+      return String(value);
+    }
 
-      for (let i = 0; i <= 5; i++) {
-        const y = baseY - (chartHeight / 5) * i;
+    function buildScale(values) {
+      const minRaw = Math.min(...values, 0);
+      const maxRaw = Math.max(...values, 0);
+
+      if (minRaw === maxRaw) {
+        const offset = Math.max(Math.abs(minRaw) * 0.2, 1);
+        return { min: minRaw - offset, max: maxRaw + offset };
+      }
+
+      const range = maxRaw - minRaw;
+      const padding = Math.max(range * 0.12, 1);
+      return {
+        min: minRaw - padding,
+        max: maxRaw + padding
+      };
+    }
+
+    function getY(value, scale, chartHeight, paddingTop) {
+      const ratio = (value - scale.min) / (scale.max - scale.min);
+      return paddingTop + chartHeight - ratio * chartHeight;
+    }
+
+    function drawChart() {
+      const serie = getFilteredSeries();
+      const { width, height } = resizeCanvas();
+      const padding = { top: 30, right: 24, bottom: 54, left: 46 };
+      const chartWidth = width - padding.left - padding.right;
+      const chartHeight = height - padding.top - padding.bottom;
+
+      if (serie.length === 0) {
+        ctx.fillStyle = '#6F7694';
+        ctx.font = '14px Lato, sans-serif';
+        ctx.fillText('Sin actividad mensual para graficar.', 24, 44);
+        return;
+      }
+
+      const values = serie.map(item => Number(item.total) || 0);
+      const scale = buildScale(values);
+      const stepX = serie.length > 1 ? chartWidth / (serie.length - 1) : 0;
+      const baseY = getY(0, scale, chartHeight, padding.top);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.strokeStyle = '#E4E9F4';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (chartHeight / 4) * i;
         ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(availableWidth + padding, y);
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
         ctx.stroke();
       }
 
       ctx.beginPath();
-      chartData.forEach((value, index) => {
-        const x = padding + stepX * index;
-        const y = baseY - (value / max) * chartHeight;
+      ctx.moveTo(padding.left, baseY);
+      ctx.lineTo(width - padding.right, baseY);
+      ctx.strokeStyle = '#BAC3E6';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      serie.forEach((item, index) => {
+        const x = padding.left + stepX * index;
+        const y = getY(Number(item.total) || 0, scale, chartHeight, padding.top);
         if (index === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       });
-      ctx.strokeStyle = '#4B4EFC';
+      ctx.strokeStyle = '#3D4CFA';
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      chartData.forEach((value, index) => {
-        const x = padding + stepX * index;
-        const y = baseY - (value / max) * chartHeight;
+      serie.forEach((item, index) => {
+        const x = padding.left + stepX * index;
+        const currentValue = Number(item.total) || 0;
+        const y = getY(currentValue, scale, chartHeight, padding.top);
+        const pointColor = '#3D4CFA';
+        const valueColor = currentValue >= 0 ? '#2E7D32' : '#C62828';
+        const labelY = currentValue >= 0 ? y - 12 : y + 20;
 
         ctx.beginPath();
-        ctx.arc(x, y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = '#4B4EFC';
+        ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = pointColor;
         ctx.fill();
 
-        ctx.fillStyle = '#444';
+        ctx.fillStyle = valueColor;
+        ctx.font = '11px Lato, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(currentValue, x, labelY);
+
+        ctx.fillStyle = '#5C6382';
         ctx.font = '12px Lato, sans-serif';
-        ctx.fillText(chartLabels[index], x - 14, baseY + 20);
+        ctx.textAlign = 'center';
+        ctx.fillText(formatPeriodo(item.periodo), x, height - 18);
       });
+
+      ctx.fillStyle = '#5C6382';
+      ctx.font = '11px Lato, sans-serif';
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= 4; i++) {
+        const value = Math.round(scale.max - ((scale.max - scale.min) / 4) * i);
+        const y = padding.top + (chartHeight / 4) * i + 4;
+        ctx.fillText(formatAxisValue(value), padding.left - 8, y);
+      }
     }
 
-    window.addEventListener('resize', drawChart);
-    renderDashboard();
+    async function loadDashboard() {
+      const loading = document.getElementById('loading-text');
+      try {
+        const res = await fetch(`${API_BASE}/dashboard/resumen`, {
+          headers: authHeaders()
+        });
+        if (!res.ok) throw new Error();
+        dashboardData = await res.json();
+        renderYearFilter();
+        renderMetrics();
+        renderLatestReports();
+        drawChart();
+        loading.innerText = 'Inicio actualizado con datos reales de la base de inventarios.';
+      } catch (error) {
+        loading.innerText = 'No se pudo cargar el resumen del inicio. Verificá que el backend esté corriendo en el puerto 3000.';
+      }
+    }
+
+    document.getElementById('yearFilter').addEventListener('change', event => {
+      selectedYear = event.target.value;
+      renderMetrics();
+      drawChart();
+    });
+
+    window.addEventListener('resize', () => drawChart());
+    loadDashboard();
   </script>
+
   <div class="footer-line"></div>
   <script src="../js/navbar.js"></script>
   <script>

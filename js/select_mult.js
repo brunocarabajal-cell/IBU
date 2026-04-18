@@ -3,12 +3,16 @@ function crearDesplegable({
   opciones = [],
   placeholder = 'Seleccionar',
   onChange = null,
-  multiple = false
+  multiple = false,
+  selectedValues = [],
+  selectedValue = ''
 }) {
   const wrapper = document.createElement('div');
   wrapper.className = 'select-wrapper';
 
-  let valoresSeleccionados = [];
+  let valoresSeleccionados = multiple
+    ? [...selectedValues]
+    : (selectedValue ? [selectedValue] : []);
 
   const selected = document.createElement('div');
   selected.className = 'select-selected';
@@ -119,13 +123,35 @@ function crearDesplegable({
         text.innerText = op;
         list.classList.add('select-hide');
         selected.classList.remove('active');
+        valoresSeleccionados = [op];
 
         if (onChange) onChange(op);
       }
     });
 
+    if (multiple && valoresSeleccionados.includes(op)) {
+      item.classList.add('selected-item');
+      const cb = item.querySelector('input.select-checkbox');
+      if (cb) cb.checked = true;
+    }
+
     list.appendChild(item);
   });
+
+  if (multiple) {
+    text.innerText = valoresSeleccionados.length === 0
+      ? placeholder
+      : valoresSeleccionados.length === 1
+        ? valoresSeleccionados[0]
+        : `${valoresSeleccionados.length} seleccionados`;
+
+    const checkboxAll = list.querySelector('.select-all-item input.select-checkbox');
+    if (checkboxAll) {
+      checkboxAll.checked = valoresSeleccionados.length > 0 && valoresSeleccionados.length === opciones.length;
+    }
+  } else if (valoresSeleccionados[0]) {
+    text.innerText = valoresSeleccionados[0];
+  }
 
   selected.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -211,7 +237,9 @@ function select_mult(selector, config) {
     opciones: config.options || [],
     placeholder: config.placeholder || 'Seleccionar',
     onChange: config.onChange || null,
-    multiple: config.multiple || false
+    multiple: config.multiple || false,
+    selectedValues: config.selectedValues || [],
+    selectedValue: config.selectedValue || ''
   });
 
   container.innerHTML = '';

@@ -198,8 +198,10 @@
 
   <script>
     async function login() {
-      const legajo = document.getElementById('usuario').value.trim();
-      const password = document.getElementById('password').value.trim();
+      const userInput = document.getElementById('usuario');
+      const passwordInput = document.getElementById('password');
+      const legajo = userInput.value.trim();
+      const password = passwordInput.value.trim();
       const error = document.getElementById('error');
 
       if (!legajo || !password) {
@@ -222,20 +224,29 @@
         if (!res.ok) {
           error.innerText = data.error || 'Error en login';
           error.style.display = 'block';
+          passwordInput.value = '';
           return;
         }
 
         localStorage.setItem('ibu_user', JSON.stringify({
+          id: data.id,
           nombre: data.nombre,
-          rol: data.puesto,
-          legajo: data.codigo
+          rol: data.perfil || data.puesto,
+          puesto: data.puesto,
+          legajo: data.legajo,
+          codigo: data.codigo,
+          ubicacion: data.ubicacion,
+          ubicacionDescripcion: data.ubicacionDescripcion,
+          accesoTotalUbicaciones: data.accesoTotalUbicaciones
         }));
 
-        window.location.href = "dashboard.html";
+        window.location.href = "Dashboard.html";
 
       } catch (e) {
         error.innerText = "Error de conexión con el servidor";
         error.style.display = 'block';
+      } finally {
+        passwordInput.value = '';
       }
     }
   </script>

@@ -64,8 +64,28 @@
   font-size:13px;
 }
 
-.avatar-img{
-  width:34px;
-  height:34px;
-  border-radius:50%;
+.nav-user-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logout-btn{
+  border:none;
+  background:rgba(255,255,255,0.18);
+  color:#fff;
+  border-radius:10px;
+  width:38px;
+  height:38px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:600;
+  transition:background 0.2s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.logout-btn:hover{
+  background:rgba(255,255,255,0.26);
 }

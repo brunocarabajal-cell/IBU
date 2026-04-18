@@ -34,7 +34,7 @@
     <tr>
       <th>Legajo</th>
       <th>Nombre</th>
-      <th>Puesto</th>
+      <th>Perfil</th>
       <th>Ubicación</th>
       <th>Estado</th>
       <th>Acción</th>
@@ -47,8 +47,8 @@
   <div class="modal-content">
     <h3>Editar Usuario</h3>
     <input id="editNombre" placeholder="Nombre">
-    <input id="editPuesto" placeholder="Puesto">
-    <input id="editUbicacion" placeholder="Ubicación ID">
+    <input id="editPuesto" placeholder="Perfil">
+    <input id="editUbicacion" placeholder="Ubicación">
     <button onclick="guardarEdicion()">Guardar</button>
     <button onclick="cerrarModal()">Cancelar</button>
   </div>
@@ -67,11 +67,11 @@ async function cargarUsuarios() {
       <tr>
         <td>${u.legajo}</td>
         <td>${u.nombre}</td>
-        <td>${u.puesto}</td>
+        <td>${u.perfil}</td>
         <td>${u.ubicacion}</td>
         <td>${u.activo ? 'Activo' : 'Inactivo'}</td>
         <td>
-          <button class="editar" onclick="abrirModal(${u.id}, '${u.nombre}', '${u.puesto}', '${u.ubicacion}')">Editar</button>
+          <button class="editar" onclick="abrirModal(${u.id}, '${u.nombre}', '${u.perfil}', '${u.ubicacion}')">Editar</button>
           ${u.activo
             ? `<button class="desactivar" onclick="desactivar(${u.id})">Desactivar</button>`
             : `<button class="activar" onclick="activar(${u.id})">Activar</button>`}
@@ -107,13 +107,23 @@ function cerrarModal(){
 
 async function guardarEdicion(){
   const nombre = document.getElementById('editNombre').value;
-  const puesto = document.getElementById('editPuesto').value;
-  const ubicacion_id = document.getElementById('editUbicacion').value;
+  const perfil = document.getElementById('editPuesto').value;
+  const ubicacionCodigo = document.getElementById('editUbicacion').value;
+  const accesoTotalUbicaciones = perfil === 'Analista de AAFF';
 
   await fetch(`http://127.0.0.1:3000/usuarios/${usuarioEditando}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nombre, puesto, ubicacion_id })
+    body: JSON.stringify({
+      nombre,
+      puesto: accesoTotalUbicaciones ? 'ADMINISTRACION ACTIVOS FIJOS' : perfil,
+      perfil,
+      perfilDescripcion: '',
+      ubicacionCodigo,
+      ubicacionDescripcion: ubicacionCodigo,
+      ubicacionOrigen: ubicacionCodigo,
+      accesoTotalUbicaciones
+    })
   });
 
   cerrarModal();

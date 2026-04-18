@@ -2,367 +2,406 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IBU - Usuarios</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/navbar.css">
-
+<link rel="stylesheet" href="../css/select_styles.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Lato',sans-serif}
-body{background:#F4F4F8}
-
-/* TOP */
-.top{
-  background:linear-gradient(90deg,#4B4EFC,#5A5DFD);
-  padding:0 0 80px;
-  margin-top:-1px;
-}
-
-/* CARD */
-.card{
-  background:#fff;
-  margin:30px 40px;
-  border-radius:16px;
-  padding:24px 30px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  overflow:hidden;
-}
-
-/* FORM */
-.form{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  align-items:flex-start;
-}
-
-.form div{
-  display:flex;
-  flex-direction:column;
-  font-size:12px;
-  flex:1 1 160px;
-  min-width:140px;
-}
-
-.form input,.form select{
-  padding:8px 4px;
-  border:none;
-  border-bottom:2px solid #DADAE5;
-  border-radius:0;
-  min-width:150px;
-  background:transparent;
-}
-
-.form input:disabled,
-.form select:disabled{
-  color:#1A1A2E;
-  opacity:1;
-  background:transparent;
-  border-bottom:2px solid #DADAE5;
-}
-
-.form input:focus,
-.form select:focus{
-  outline:none;
-  border-bottom:2px solid #4B4EFC;
-}
-
-.btn{
-  background:#2C3E6B;
-  color:#fff;
-  border:none;
-  padding:10px 20px;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-.form button{
-  flex:0 0 auto;
-  height:38px;
-  margin-top:18px; /* 🔥 baja botones */
-}
-
-.btn-green{
-  background:#43A047;
-}
-
-/* TABLES */
-.table-card{
-  background:#E9E9EF;
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-th{
-  color:#4B4EFC;
-  font-size:13px;
-  text-align:left;
-  padding:12px;
-  border-bottom:2px solid #4B4EFC;
-}
-
-td{
-  padding:12px;
-  border-top:1px solid #E6E6EF;
-}
-
-tr:hover{
-  background:rgba(75,78,252,0.05);
-}
-
-
-.footer-line{
-  height:40px;
-  background:#303D9F;
-  width:100%;
-  position:fixed;
-  bottom:0;
-  left:0;
-  z-index:999;
-}
-
-body{
-  padding-bottom:50px;
-}
-
-@media (max-width: 900px){
-  .form{
-    justify-content:flex-start;
-  }
-}
-
-@media (max-width: 600px){
-  .form{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .form div{
-    width:100%;
-  }
-
-  .form button{
-    width:100%;
-  }
+body{background:#F4F4F8;padding-bottom:56px}
+.top{background:linear-gradient(90deg,#4B4EFC,#5A5DFD);padding:0 0 84px;margin-top:-1px}
+.card{background:#fff;margin:30px 40px;border-radius:18px;padding:24px 28px;box-shadow:0 8px 22px rgba(0,0,0,0.08)}
+.title{color:#303D9F;font-size:18px;font-weight:700}
+.line{height:2px;background:#4B4EFC;margin:14px 0 22px}
+.form{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#4A4F68}
+.field input{min-height:42px;border:1px solid #DADAE5;border-radius:12px;padding:0 12px;background:#fff}
+.field input:disabled{background:#F6F7FB;color:#444A63}
+.actions{display:flex;gap:10px;align-items:end}
+.btn{height:42px;border:none;border-radius:12px;padding:0 18px;background:#2C3E6B;color:#fff;cursor:pointer;font-weight:600}
+.btn-green{background:#43A047}
+.btn-light{background:#E8EBFF;color:#3040D6}
+.table-card{background:#fff;border-radius:18px;padding:20px;margin:0 40px;box-shadow:0 8px 22px rgba(0,0,0,0.06)}
+.section-title{color:#303D9F;font-size:16px;font-weight:700;margin-bottom:14px}
+table{width:100%;border-collapse:collapse}
+th{color:#4B4EFC;font-size:13px;text-align:left;padding:12px;border-bottom:2px solid #4B4EFC}
+td{padding:12px;border-top:1px solid #ECECF4;font-size:14px}
+tr:hover{background:rgba(75,78,252,0.04)}
+.pill{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.pill-ok{background:#E4F5E8;color:#2E7D32}
+.pill-off{background:#FCE3E3;color:#D84343}
+.helper{margin-top:16px;color:#6C728E;font-size:13px}
+.footer-line{height:40px;background:#303D9F;width:100%;position:fixed;bottom:0;left:0;z-index:999}
+.field > div{display:block;min-height:42px}
+.select-wrapper{width:100%;min-height:42px;max-height:none;height:auto;border:none !important}
+.select-selected{height:42px;border:1px solid #DADAE5 !important;border-radius:12px !important;background:#fff !important;color:#6F7694}
+.select-items{z-index:9999}
+@media (max-width: 1100px){.form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width: 700px){
+  .card,.table-card{margin-left:18px;margin-right:18px}
+  .form{grid-template-columns:1fr}
+  .actions{flex-wrap:wrap}
 }
 </style>
 </head>
-
 <body>
-
 <div class="top">
-
-<div id="navbar-container"></div>
-
-<!-- BUSQUEDA -->
-<div class="card">
-  <div class="title">Buscar</div>
-  <div class="line"></div>
-
-  <div class="form">
-    <div>
-      <label>Nº de Legajo</label>
-      <input id="legajo" oninput="autocompletarUsuario()">
+  <div id="navbar-container"></div>
+  <div class="card">
+    <div class="title">Gestión de usuarios</div>
+    <div class="line"></div>
+    <div class="form">
+      <div class="field">
+        <label>Nº de legajo</label>
+        <input id="legajo" placeholder="Ej: 1800">
+      </div>
+      <div class="field">
+        <label>Nombre</label>
+        <input id="nombre" placeholder="Apellido y nombre" disabled>
+      </div>
+      <div class="field">
+        <label>Ubicaciones</label>
+        <div id="ubicaciones"></div>
+      </div>
+      <div class="field">
+        <label>Perfil</label>
+        <div id="perfil"></div>
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <div id="estado"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="buscarUsuarios()">Buscar</button>
+        <button class="btn btn-green" id="btnGuardar" onclick="guardarCambios()">Guardar</button>
+        <button class="btn btn-light" onclick="limpiarFiltros()">Limpiar</button>
+      </div>
     </div>
-
-    <div>
-      <label>Nombre</label>
-      <input id="nombre" disabled>
-    </div>
-
-    <div>
-      <label>Ubicación</label>
-      <select id="ubicacion" disabled></select>
-    </div>
-
-    <div>
-      <label>Estado</label>
-      <input id="estado" disabled>
-    </div>
-
-    <button class="btn" onclick="filtrarUsuarios()">Buscar</button>
-    <button class="btn" onclick="guardarCambios()">Guardar</button>
-    <button class="btn btn-green" onclick="exportUsuarios()">📊</button>
+    <div class="helper" id="helperText">Seleccioná un usuario para editar su perfil y una o varias ubicaciones.</div>
   </div>
 </div>
 
-</div>
-
-<!-- DOS TABLAS -->
-<div style="display:flex; gap:20px; margin:30px;">
-
-  <!-- UBICACIONES -->
-  <div class="table-card" style="flex:1;">
-    <table>
-      <thead>
-        <tr>
-          <th>CheckBox</th>
-          <th>Ubicación</th>
-          <th>Descripción</th>
-        </tr>
-      </thead>
-      <tbody id="tablaUbicaciones"></tbody>
-    </table>
-  </div>
-
-  <!-- PERFILES -->
-  <div class="table-card" style="flex:1;">
-    <table>
-      <thead>
-        <tr>
-          <th>CheckBox</th>
-          <th>Perfil</th>
-          <th>Descripción</th>
-        </tr>
-      </thead>
-      <tbody id="tablaPerfiles"></tbody>
-    </table>
-  </div>
-
+<div class="table-card">
+  <div class="section-title">Usuarios encontrados</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Legajo</th>
+        <th>Nombre</th>
+        <th>Perfil</th>
+        <th>Ubicaciones</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody id="tablaUsuarios">
+      <tr><td colspan="5">Usá los filtros para consultar usuarios.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="footer-line"></div>
 
+<script src="../js/select_mult.js"></script>
 <script>
+function goInicio(){window.location.href='Dashboard.html'}
+function goInventario(){window.location.href='Inventario.html'}
+function goProrrogas(){window.location.href='Prorrogas.html'}
+function goReportes(){window.location.href='reportes.html'}
+function goUsuarios(){window.location.href='usuarios.html'}
 
-/* NAV */
-function goInicio(){window.location.href="Dashboard.html"}
-function goInventario(){window.location.href="Inventario.html"}
-function goProrrogas(){window.location.href="Prorrogas.html"}
-function goReportes(){window.location.href="reportes.html"}
-function goUsuarios(){window.location.href="usuarios.html"}
+const API_BASE = 'http://127.0.0.1:3000';
+let filtros = { ubicaciones: [], perfiles: [] };
+let usuariosCache = [];
+let usuarioSeleccionado = null;
+let ubicacionesSeleccionadas = [];
+let perfilSeleccionado = '';
+let estadoSeleccionado = '';
 
-/* DATA */
-
-// Obtener usuario desde backend
-async function obtenerUsuario(legajo){
+function authHeaders() {
   try {
-    const res = await fetch(`http://127.0.0.1:3000/usuarios/${legajo}`);
-    if(!res.ok) return null;
-    return await res.json();
-  } catch(e){
-    console.error(e);
+    const user = JSON.parse(localStorage.getItem('ibu_user')) || {};
+    return user.legajo ? { 'X-User-Legajo': String(user.legajo) } : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function currentUser() {
+  try {
+    return JSON.parse(localStorage.getItem('ibu_user')) || null;
+  } catch (error) {
     return null;
   }
 }
-const ubicaciones=[
-{cod:'SUC 002',desc:'Sucursal 2'},
-{cod:'SUC 007',desc:'Sucursal 7'},
-{cod:'512',desc:'Administración Base 12'},
-{cod:'ADMCENTRAL',desc:'Administración Central'},
-{cod:'SUC 229',desc:'Frigorífico Rosario'},
-{cod:'SUC 072',desc:'Frigorífico FAMABA'}
-];
 
-function cargarUbicacionesSelect(){
-  const select = document.getElementById('ubicacion');
-  select.innerHTML = '';
-  ubicaciones.forEach((u, index)=>{
-    select.innerHTML += `<option value="${index+1}">${u.cod} - ${u.desc}</option>`;
+function isActivosFijos(user) {
+  return user?.rol === 'Analista de AAFF';
+}
+
+function isAdminOrGerencia(user) {
+  return ['Administrativo', 'Gerencia'].includes(user?.rol);
+}
+
+function isAssignableByAdminGerencia(profile) {
+  return ['Administrativo', 'Gerencia', 'Administrativo Predio', 'Sumador'].includes(profile);
+}
+
+function allowedProfilesForCurrentUser() {
+  const user = currentUser();
+  const allProfiles = filtros.perfiles || [];
+
+  if (isActivosFijos(user)) return allProfiles;
+  if (isAdminOrGerencia(user)) {
+    return allProfiles.filter(item => isAssignableByAdminGerencia(item.perfil));
+  }
+
+  return [];
+}
+
+function canEditSelectedUser(target) {
+  const user = currentUser();
+  if (!user || !target) return false;
+  if (isActivosFijos(user)) return true;
+  if (isAdminOrGerencia(user) && isAssignableByAdminGerencia(target.perfil)) return true;
+  return false;
+}
+
+function setHelper(message) {
+  document.getElementById('helperText').innerText = message;
+}
+
+function fillProfileSelect(selected = '') {
+  const options = allowedProfilesForCurrentUser();
+  perfilSeleccionado = selected;
+  select_mult('#perfil', {
+    options: options.map(item => item.perfil),
+    placeholder: 'Todos',
+    multiple: false,
+    selectedValue: selected,
+    onChange: value => {
+      perfilSeleccionado = value || '';
+    }
   });
 }
 
-const perfiles=[
-{nom:'Sumador',desc:'Sumador de Bienes de Uso'},
-{nom:'Administrativo',desc:'Administrativo de Sucursal'},
-{nom:'Administrativo Predio',desc:'Administrativo de Predios'},
-{nom:'Analista AAFF',desc:'Analista de Activos Fijos'},
-{nom:'Gerente',desc:'Gerencia de Sucursal/Predios'}
-];
-
-/* RENDER */
-function render(){
-
-const ub=document.getElementById('tablaUbicaciones');
-ub.innerHTML='';
-ubicaciones.forEach(u=>{
-  ub.innerHTML+=`<tr>
-  <td style="text-align:center;"><input type="checkbox" style="transform:scale(1.2);cursor:pointer;"></td>
-  <td>${u.cod}</td>
-  <td>${u.desc}</td>
-  </tr>`;
-});
-
-const pf=document.getElementById('tablaPerfiles');
-pf.innerHTML='';
-perfiles.forEach(p=>{
-  pf.innerHTML+=`<tr>
-  <td style="text-align:center;"><input type="checkbox" style="transform:scale(1.2);cursor:pointer;"></td>
-  <td>${p.nom}</td>
-  <td>${p.desc}</td>
-  </tr>`;
-});
+function fillLocationSelect(selected = []) {
+  ubicacionesSeleccionadas = [...selected];
+  select_mult('#ubicaciones', {
+    options: filtros.ubicaciones.map(item => item.codigo),
+    placeholder: 'Todas',
+    multiple: true,
+    selectedValues: selected,
+    onChange: values => {
+      ubicacionesSeleccionadas = Array.isArray(values) ? values : [];
+    }
+  });
 }
 
-/* FUNCIONES */
-async function autocompletarUsuario(){
-  const legajo = inputLegajo.getValue();
+function fillEstadoSelect(selected = '') {
+  estadoSeleccionado = selected;
+  select_mult('#estado', {
+    options: ['Activo', 'Inactivo'],
+    placeholder: 'Todos',
+    multiple: false,
+    selectedValue: selected === '1' ? 'Activo' : selected === '0' ? 'Inactivo' : '',
+    onChange: value => {
+      estadoSeleccionado = value === 'Activo' ? '1' : value === 'Inactivo' ? '0' : '';
+    }
+  });
+}
 
-  if(!legajo) return;
+async function cargarFiltros() {
+  const res = await fetch(`${API_BASE}/usuarios/filtros`, { headers: authHeaders() });
+  if (!res.ok) throw new Error();
+  filtros = await res.json();
+  fillLocationSelect();
+  fillProfileSelect();
+  fillEstadoSelect();
+}
 
-  const user = await obtenerUsuario(legajo);
-
-  document.getElementById('nombre').value = user ? user.nombre : '';
-  if(user){
-    const select = document.getElementById('ubicacion');
-    const index = ubicaciones.findIndex(u => u.cod === user.codigo);
-    if(index !== -1) select.value = index+1;
+function renderUsuarios(rows) {
+  const tbody = document.getElementById('tablaUsuarios');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5">No se encontraron usuarios para los filtros aplicados.</td></tr>';
+    return;
   }
-  document.getElementById('estado').value = user ? 'Activo' : '';
+
+  tbody.innerHTML = rows.map(user => `
+    <tr onclick="seleccionarUsuario(${user.id})" style="cursor:pointer;">
+      <td>${user.legajo}</td>
+      <td>${user.nombre}</td>
+      <td>${user.perfil}</td>
+      <td>${(user.ubicacionCodigos || []).join(', ') || '-'}</td>
+      <td><span class="pill ${user.activo ? 'pill-ok' : 'pill-off'}">${user.activo ? 'Activo' : 'Inactivo'}</span></td>
+    </tr>
+  `).join('');
 }
 
-function filtrarUsuarios(){
-alert('Filtro aplicado');
+function actualizarEdicionHabilitada() {
+  const editable = canEditSelectedUser(usuarioSeleccionado);
+  document.getElementById('btnGuardar').disabled = !editable;
+  document.getElementById('btnGuardar').style.opacity = editable ? '1' : '.55';
 }
 
-function guardarCambios(){
-  alert('Cambios guardados correctamente');
+function seleccionarUsuario(id) {
+  const user = usuariosCache.find(item => item.id === id);
+  if (!user) return;
+
+  usuarioSeleccionado = user;
+  document.getElementById('legajo').value = user.legajo;
+  document.getElementById('nombre').value = user.nombre;
+  fillLocationSelect(user.ubicacionCodigos || []);
+  fillProfileSelect(user.perfil || '');
+  fillEstadoSelect(user.activo ? '1' : '0');
+  actualizarEdicionHabilitada();
+
+  if (canEditSelectedUser(user)) {
+    setHelper(`Editando a ${user.nombre}. Podés asignarle varias ubicaciones y actualizar el perfil según tus permisos.`);
+  } else {
+    setHelper(`Podés consultar a ${user.nombre}, pero no tenés permisos para modificar ese perfil.`);
+  }
 }
 
-function exportUsuarios(){
-let csv="data:text/csv;charset=utf-8,";
-ubicaciones.forEach(u=>{
-csv+=`${u.cod},${u.desc}\n`;
+async function autocompletarPorLegajo() {
+  const legajo = document.getElementById('legajo').value.trim();
+  if (!legajo) {
+    document.getElementById('nombre').value = '';
+    usuarioSeleccionado = null;
+    fillLocationSelect();
+    fillProfileSelect();
+    fillEstadoSelect();
+    actualizarEdicionHabilitada();
+    return;
+  }
+
+  const res = await fetch(`${API_BASE}/usuarios/${encodeURIComponent(legajo)}`, {
+    headers: authHeaders()
+  });
+
+  if (!res.ok) {
+    document.getElementById('nombre').value = '';
+    return;
+  }
+
+  const user = await res.json();
+  usuarioSeleccionado = user;
+  document.getElementById('nombre').value = user.nombre;
+  fillLocationSelect(user.ubicacionCodigos || []);
+  fillProfileSelect(user.perfil || '');
+  fillEstadoSelect(user.activo ? '1' : '0');
+  actualizarEdicionHabilitada();
+}
+
+async function buscarUsuarios() {
+  const params = new URLSearchParams();
+  const legajo = document.getElementById('legajo').value.trim();
+  const ubicaciones = ubicacionesSeleccionadas;
+  const perfil = perfilSeleccionado;
+  const estado = estadoSeleccionado;
+
+  if (legajo) params.append('legajo', legajo);
+  ubicaciones.forEach(value => params.append('ubicacion', value));
+  if (perfil) params.append('perfil', perfil);
+  if (estado) params.append('activo', estado);
+
+  const res = await fetch(`${API_BASE}/usuarios?${params.toString()}`, {
+    headers: authHeaders()
+  });
+
+  if (!res.ok) {
+    setHelper('No se pudo consultar la base de usuarios.');
+    return;
+  }
+
+  usuariosCache = await res.json();
+  renderUsuarios(usuariosCache);
+  setHelper(`Se encontraron ${usuariosCache.length} usuario(s) según los filtros actuales.`);
+}
+
+async function guardarCambios() {
+  if (!usuarioSeleccionado?.id) {
+    setHelper('Primero seleccioná un usuario desde la búsqueda.');
+    return;
+  }
+
+  if (!canEditSelectedUser(usuarioSeleccionado)) {
+    setHelper('No tenés permisos para modificar ese usuario.');
+    return;
+  }
+
+  const ubicacionCodigos = ubicacionesSeleccionadas;
+  const ubicacionDescripciones = ubicacionCodigos.map(code => {
+    const item = filtros.ubicaciones.find(entry => entry.codigo === code);
+    return item?.descripcion || code;
+  });
+  const perfilInfo = (filtros.perfiles || []).find(item => item.perfil === perfilSeleccionado);
+  const accesoTotal = perfilSeleccionado === 'Analista de AAFF';
+
+  const res = await fetch(`${API_BASE}/usuarios/${usuarioSeleccionado.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...authHeaders()
+    },
+    body: JSON.stringify({
+      nombre: usuarioSeleccionado.nombre,
+      puesto: accesoTotal ? 'ADMINISTRACION ACTIVOS FIJOS' : (perfilSeleccionado || usuarioSeleccionado.puesto),
+      perfil: perfilSeleccionado,
+      perfilDescripcion: perfilInfo?.perfil_descripcion || '',
+      ubicacionCodigo: ubicacionCodigos[0] || '',
+      ubicacionCodigos,
+      ubicacionDescripcion: ubicacionDescripciones[0] || '',
+      ubicacionDescripciones,
+      ubicacionOrigen: ubicacionCodigos.join(','),
+      accesoTotalUbicaciones: accesoTotal
+    })
+  });
+
+  const result = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    setHelper(result.error || 'No se pudieron guardar los cambios del usuario seleccionado.');
+    return;
+  }
+
+  setHelper('Cambios guardados correctamente.');
+  await buscarUsuarios();
+  await autocompletarPorLegajo();
+}
+
+function limpiarFiltros() {
+  document.getElementById('legajo').value = '';
+  document.getElementById('nombre').value = '';
+  usuarioSeleccionado = null;
+  usuariosCache = [];
+  fillLocationSelect();
+  fillProfileSelect();
+  fillEstadoSelect();
+  renderUsuarios([]);
+  actualizarEdicionHabilitada();
+  setHelper('Filtros limpiados.');
+}
+
+document.getElementById('legajo').addEventListener('input', () => {
+  autocompletarPorLegajo().catch(() => {
+    setHelper('No se pudo autocompletar el usuario para ese legajo.');
+  });
 });
-let link=document.createElement('a');
-link.href=encodeURI(csv);
-link.download='usuarios.csv';
-link.click();
-}
 
-// Cargar ubicaciones en el select antes de render
-cargarUbicacionesSelect();
-
-render();
-
+(async function init() {
+  try {
+    await cargarFiltros();
+    renderUsuarios([]);
+    actualizarEdicionHabilitada();
+  } catch (error) {
+    setHelper('No se pudieron cargar los filtros de usuarios desde el backend.');
+  }
+})();
 </script>
-
-<style>
-.table-card {
-  background: #E9E9EF;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-radius: 8px;
-}
-.card {
-  margin:30px 40px;
-}
-.top {
-  padding-bottom:80px;
-}
-.navbar {
-  border-bottom:1px solid rgba(255,255,255,0.2);
-}
-</style>
 
 <script src="../js/navbar.js"></script>
 <script>
   cargarUsuario('usuarios');
 </script>
-
 </body>
 </html>
