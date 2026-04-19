@@ -199,6 +199,21 @@
     gap:10px;
     flex-wrap:wrap;
     align-items:end;
+    width:100%;
+  }
+  .toolbar-spacer{
+    flex:1 1 auto;
+  }
+  #btn-excel{
+    height:40px;
+    display:flex;
+    align-items:flex-end;
+    flex:0 0 auto;
+  }
+  #btn-excel button{
+    height:40px;
+    min-width:44px;
+    padding:0 12px;
   }
   .toolbar-field{min-width:220px}
   .table-wrap{
@@ -411,7 +426,6 @@
         </div>
         <div class="action-column">
           <button class="btn btn-primary" type="submit" id="submitButton">Registrar solicitud</button>
-          <button class="btn btn-secondary" type="button" id="exportButton">Exportar listado</button>
         </div>
       </form>
       <div class="permission-note" id="permissionNote"></div>
@@ -451,6 +465,8 @@
             <option value="">Todos</option>
           </select>
         </div>
+        <div class="toolbar-spacer"></div>
+        <div id="btn-excel"></div>
       </div>
     </div>
     <div class="table-wrap">
@@ -505,7 +521,7 @@
       <div id="modalActionNote" class="section-subtitle"></div>
       <div>
         <label for="modalObservation">Observación de gestión</label>
-        <textarea id="modalObservation" placeholder="Observación opcional para aprobar, rechazar o cancelar"></textarea>
+        <textarea id="modalObservation" placeholder="Observación opcional para aprobar o rechazar"></textarea>
       </div>
       <div class="actions" id="modalButtons"></div>
     </div>
@@ -586,7 +602,7 @@ function getCreatePermissionMessage() {
     return 'Podés revisar y aprobar solicitudes pendientes de Gerencia dentro de tus ubicaciones.';
   }
   if (state.user.perfil === 'Analista de AAFF') {
-    return 'Podés visualizar todas las ubicaciones y cerrar la aprobación final del circuito.';
+    return '';
   }
   return 'Este perfil sólo puede consultar solicitudes visibles según sus ubicaciones habilitadas.';
 }
@@ -652,7 +668,7 @@ function renderForm() {
     }
   }));
 
-  const canCreate = ['Administrativo', 'Administrativo Predio'].includes(state.user?.perfil);
+  const canCreate = ['Administrativo', 'Administrativo Predio', 'Analista de AAFF'].includes(state.user?.perfil);
   ['inventarioInput', 'fechaLimiteInput', 'observacionInput', 'submitButton']
     .forEach(id => {
       document.getElementById(id).disabled = !canCreate;
@@ -667,14 +683,20 @@ function renderForm() {
   document.getElementById('inventarioInput').value = '';
   state.inventarioSeleccionado = null;
   updateInventarioHelp();
-  document.getElementById('permissionNote').textContent = getCreatePermissionMessage();
+  const permissionNote = document.getElementById('permissionNote');
+  const permissionMessage = getCreatePermissionMessage();
+  permissionNote.textContent = permissionMessage;
+  permissionNote.style.display = permissionMessage ? 'block' : 'none';
 }
 
 function renderEstadoFilter() {
   const estadoFilter = document.getElementById('estadoFilter');
   const currentValue = estadoFilter.value;
-  estadoFilter.innerHTML = '<option value="">Todos</option>';
+  estadoFilter.innerHTML = '<option value="">Pendientes</option>';
   state.estados.forEach(estado => {
+    if (estado === 'Pendiente Gerencia' || estado === 'Pendiente AAFF') {
+      return;
+    }
     const option = document.createElement('option');
     option.value = estado;
     option.textContent = estado;
@@ -751,9 +773,6 @@ function renderModal(detail) {
   if (detail.permisos.puedeAprobar) {
     note.push('Tenés permiso para resolver la etapa actual.');
   }
-  if (detail.permisos.puedeCancelar) {
-    note.push('También podés cancelar la solicitud mientras no esté cerrada.');
-  }
   document.getElementById('modalActionNote').textContent = note.join(' ');
 
   const buttons = [];
@@ -762,9 +781,6 @@ function renderModal(detail) {
   }
   if (detail.permisos.puedeRechazar) {
     buttons.push('<button class="btn btn-reject" type="button" onclick="submitDetailAction(\'rechazar\')">Rechazar</button>');
-  }
-  if (detail.permisos.puedeCancelar) {
-    buttons.push('<button class="btn btn-cancel" type="button" onclick="submitDetailAction(\'cancelar\')">Cancelar solicitud</button>');
   }
   document.getElementById('modalButtons').innerHTML = buttons.join('');
   document.getElementById('modalObservation').value = '';
@@ -821,7 +837,7 @@ async function submitDetailAction(action) {
 }
 
 function exportSolicitudes() {
-  const headers = ['Numero Inventario', 'Fecha Inventario', 'Fecha Prorroga', 'Descripcion', 'Tipo', 'Ubicacion', 'Motivo', 'Solicitante', 'Estado'];
+  const headers = ['Numero Inventario', 'Fecha Inventario', 'Fecha Prorroga', 'Descripcion', 'Tipo', 'Ubicacion', 'Motivo', 'Solicitante', 'Aprobador Gerencia', 'Aprobador Activos Fijos', 'Estado'];
   const rows = state.solicitudes.map(item => [
     item.numeroInventario,
     formatDate(item.fechaInventario),
@@ -831,6 +847,8 @@ function exportSolicitudes() {
     item.ubicacion || '',
     item.motivo || '',
     item.solicitanteNombre || '',
+    item.gerencia?.nombre || '',
+    item.activosFijos?.nombre || '',
     item.estado || ''
   ]);
   const csv = [headers, ...rows]
@@ -877,12 +895,25 @@ document.getElementById('formProrroga').addEventListener('submit', async event =
 document.getElementById('estadoFilter').addEventListener('change', loadSolicitudes);
 document.getElementById('inventarioInput').addEventListener('input', updateInventarioHelp);
 document.getElementById('inventarioInput').addEventListener('change', updateInventarioHelp);
-document.getElementById('exportButton').addEventListener('click', exportSolicitudes);
 document.getElementById('detailModal').addEventListener('click', event => {
   if (event.target.id === 'detailModal') {
     closeModal();
   }
 });
+
+const exportButton = document.createElement('button');
+exportButton.className = 'btn btn-secondary';
+exportButton.type = 'button';
+exportButton.addEventListener('click', exportSolicitudes);
+
+const excelIcon = document.createElement('img');
+excelIcon.src = '../assets/excel.png';
+excelIcon.alt = 'Exportar listado';
+excelIcon.style.width = '18px';
+excelIcon.style.height = '18px';
+
+exportButton.appendChild(excelIcon);
+document.getElementById('btn-excel').appendChild(exportButton);
 
 (async function init() {
   const rawUser = localStorage.getItem('ibu_user');

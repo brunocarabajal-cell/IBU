@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="ibu-api-base" content="">
 <title>IBU - Reportes</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/navbar.css">
@@ -341,280 +342,29 @@ body{
 
 <div class="footer-line"></div>
 
+<script src="../js/config.js"></script>
 <script>
 function goInicio(){window.location.href="Dashboard.html"}
 function goInventario(){window.location.href="Inventario.html"}
 function goProrrogas(){window.location.href="Prorrogas.html"}
 function goUsuarios(){window.location.href="usuarios.html"}
 function cerrar(){document.getElementById('modal').style.display='none'}
-function imprimir(){window.print()}
 </script>
 <script src="../js/input_text.js"></script>
 <script src="../js/select.js"></script>
 <script src="../js/select_mult.js"></script>
 <script src="../js/input_date.js"></script>
 <script src="../js/button_principal.js"></script>
-<script>
-const API_BASE = 'http://127.0.0.1:3000';
-let invValor = '';
-let estadoValor = [];
-let ubiValor = [];
-let tipoValor = [];
-let desdeValor = '';
-let hastaValor = '';
-let resultados = [];
-let primeraBusqueda = false;
-const detalleCache = new Map();
-
-function authHeaders() {
-  try {
-    const user = JSON.parse(localStorage.getItem('ibu_user')) || {};
-    return user.legajo ? { 'X-User-Legajo': String(user.legajo) } : {};
-  } catch (error) {
-    return {};
-  }
-}
-
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}
-
-function formatFecha(value) {
-  if (!value) return '-';
-  const fecha = new Date(`${value}T00:00:00`);
-  return Number.isNaN(fecha.getTime()) ? value : fecha.toLocaleDateString('es-AR');
-}
-
-function estadoClass(estado) {
-  if (estado === 'Completo') return 'status-ok';
-  if (estado === 'Pendiente' || estado === 'Prórroga') return 'status-pend';
-  if (estado === 'Reclamado') return 'status-cancel';
-  return '';
-}
-
-function renderTabla(data = resultados) {
-  const tbody = document.querySelector('#tabla tbody');
-  tbody.innerHTML = '';
-
-  if (!primeraBusqueda) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="9">Seleccionar filtros para buscar</td></tr>';
-    return;
-  }
-
-  if (data.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="9">No se encontraron resultados para los filtros seleccionados.</td></tr>';
-    return;
-  }
-
-  data.forEach(item => {
-    const diffClass = item.diferencia > 0 ? 'diff-pos' : item.diferencia < 0 ? 'diff-neg' : '';
-    const tr = document.createElement('tr');
-    const detalleId = encodeURIComponent(`${item.numero_inventario}|${item.ubicacion}|${item.fecha_inventario}|${item.tipo}`);
-    tr.innerHTML = `
-      <td>${escapeHtml(item.numero_inventario)}</td>
-      <td>${escapeHtml(formatFecha(item.fecha_inventario))}</td>
-      <td>${escapeHtml(item.ubicacion || '-')}</td>
-      <td>${escapeHtml(item.descripcion)}</td>
-      <td class="${estadoClass(item.estado)}">${escapeHtml(item.estado || '-')}</td>
-      <td>${escapeHtml(item.stock_teorico)}</td>
-      <td>${escapeHtml(item.stock_fisico)}</td>
-      <td class="${diffClass}">${escapeHtml(item.diferencia)}</td>
-      <td>
-        <button class="action" onclick="detalle('${detalleId}')">Detalles</button>
-        <span class="pdf" onclick="imprimir()">
-          <img src="../assets/PDF_icon.png" style="width:16px;vertical-align:middle;" alt="PDF">
-        </span>
-      </td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-}
-
-function updateHelperText(message) {
-  document.getElementById('helper-text').innerText = message;
-}
-
-async function cargarFiltros() {
-  try {
-    const res = await fetch(`${API_BASE}/reportes/filtros`, {
-      headers: authHeaders()
-    });
-    if (!res.ok) throw new Error();
-    const filtros = await res.json();
-
-    select_mult('#select-estado', {
-      options: filtros.estados || [],
-      placeholder: 'Todos',
-      multiple: true,
-      onChange: v => estadoValor = Array.isArray(v) ? v : []
-    });
-
-    select_mult('#select-ubi', {
-      options: filtros.ubicaciones || [],
-      placeholder: 'Todas',
-      multiple: true,
-      onChange: v => ubiValor = Array.isArray(v) ? v : []
-    });
-
-    select_mult('#select-tipo', {
-      options: filtros.tipos || [],
-      placeholder: 'Todos',
-      multiple: true,
-      onChange: v => tipoValor = Array.isArray(v) ? v : []
-    });
-  } catch (error) {
-    updateHelperText('No se pudieron cargar los filtros desde el backend. Verificá que el servidor esté levantado en el puerto 3000.');
-  }
-}
-
-async function buscarReportes() {
-  primeraBusqueda = true;
-  updateHelperText('Buscando información en la base inicial de inventarios...');
-
-  const params = new URLSearchParams();
-  if (invValor.trim()) params.append('inventario', invValor.trim());
-  estadoValor.forEach(v => params.append('estado', v));
-  ubiValor.forEach(v => params.append('ubicacion', v));
-  tipoValor.forEach(v => params.append('tipo', v));
-  if (desdeValor) params.append('desde', desdeValor);
-  if (hastaValor) params.append('hasta', hastaValor);
-
-  try {
-    const res = await fetch(`${API_BASE}/reportes?${params.toString()}`, {
-      headers: authHeaders()
-    });
-    if (!res.ok) throw new Error();
-    resultados = await res.json();
-    renderTabla(resultados);
-    updateHelperText(resultados.length > 0
-      ? `Se encontraron ${resultados.length} inventario(s) para los filtros aplicados.`
-      : 'No hubo coincidencias para los filtros aplicados.');
-  } catch (error) {
-    resultados = [];
-    renderTabla(resultados);
-    updateHelperText('No se pudo consultar la base de reportes. Verificá que el backend esté corriendo.');
-  }
-}
-
-function exportCSV() {
-  if (resultados.length === 0) {
-    updateHelperText('Primero necesitás realizar una búsqueda con resultados para exportar.');
-    return;
-  }
-
-  const headers = ['Numero', 'Fecha', 'Ubicacion', 'Descripcion', 'Estado', 'Teorico', 'Fisico', 'Diferencia'];
-  const rows = resultados.map(item => [
-    item.numero_inventario,
-    formatFecha(item.fecha_inventario),
-    item.ubicacion || '',
-    item.descripcion,
-    item.estado || '',
-    item.stock_teorico,
-    item.stock_fisico,
-    item.diferencia
-  ]);
-
-  const csvContent = [headers, ...rows]
-    .map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(','))
-    .join('\n');
-
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'reportes_inventario.csv';
-  link.click();
-  URL.revokeObjectURL(link.href);
-}
-
-async function detalle(detalleId) {
-  try {
-    const [numeroInventario, ubicacion, fechaInventario, tipoInventario] = decodeURIComponent(detalleId).split('|');
-    const cacheKey = `${numeroInventario}|${ubicacion}|${fechaInventario}|${tipoInventario}`;
-    const response = detalleCache.has(cacheKey)
-      ? { ok: true, json: async () => detalleCache.get(cacheKey) }
-      : await fetch(`${API_BASE}/reportes/${encodeURIComponent(numeroInventario)}/detalle?ubicacion=${encodeURIComponent(ubicacion)}&fecha=${encodeURIComponent(fechaInventario)}&tipo=${encodeURIComponent(tipoInventario)}`, {
-        headers: authHeaders()
-      });
-
-    if (!response.ok) throw new Error();
-    const data = await response.json();
-    detalleCache.set(cacheKey, data);
-
-    document.getElementById('detN').innerText = data.resumen.numeroInventario;
-    document.getElementById('detFecha').innerText = formatFecha(data.resumen.fechaInventario);
-    document.getElementById('detDesc').innerText = data.detalle.length === 1 ? data.detalle[0].descripcionClase : `${data.detalle.length} clases relevadas`;
-    document.getElementById('detTipo').innerText = data.resumen.tipo || '-';
-    document.getElementById('firmaAdmin').innerText = data.firmas.administrativo;
-    document.getElementById('firmaP1').innerText = data.firmas.participante1;
-    document.getElementById('firmaP2').innerText = data.firmas.participante2;
-    document.getElementById('firmaGerencia').innerText = data.firmas.gerencia;
-
-    const tbody = document.getElementById('detalleTabla');
-    tbody.innerHTML = '';
-
-    data.detalle.forEach(item => {
-      const tr = document.createElement('tr');
-      const diffClass = item.diferencia > 0 ? 'diff-pos' : item.diferencia < 0 ? 'diff-neg' : '';
-      tr.innerHTML = `
-        <td>${escapeHtml(item.numeroClase || '-')}</td>
-        <td>${escapeHtml(item.descripcionClase || '-')}</td>
-        <td>${escapeHtml(item.stockTeorico)}</td>
-        <td>${escapeHtml(item.stockFisicosAptos)}</td>
-        <td>${escapeHtml(item.stockFisicosNoAptos)}</td>
-        <td class="${diffClass}">${escapeHtml(item.diferencia)}</td>
-        <td>${escapeHtml(item.numeroBaja || '-')}</td>
-        <td>-</td>
-        <td>${escapeHtml(item.observacion || '-')}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    document.getElementById('modal').style.display = 'flex';
-  } catch (error) {
-    updateHelperText('No se pudo cargar el detalle del inventario seleccionado.');
-  }
-}
-
-const inputInv = crearInput({
-  placeholder: 'Ej: 204',
-  onChange: v => invValor = v
-});
-inputInv.addEventListener('keydown', event => {
-  if (event.key === 'Enter') {
-    buscarReportes();
-  }
-});
-document.getElementById('input-inv').appendChild(inputInv);
-
-const inputDesde = crearInputDate({ onChange: v => desdeValor = v });
-document.getElementById('input-desde').appendChild(inputDesde);
-
-const inputHasta = crearInputDate({ onChange: v => hastaValor = v });
-document.getElementById('input-hasta').appendChild(inputHasta);
-
-const btnBuscar = crearBotonPrincipal({ texto: 'Buscar', onClick: () => buscarReportes() });
-document.getElementById('btn-buscar').appendChild(btnBuscar);
-
-const btnExcel = crearBotonPrincipal({ texto: '', onClick: () => exportCSV() });
-const imgExcel = document.createElement('img');
-imgExcel.src = '../assets/excel.png';
-imgExcel.style.width = '18px';
-imgExcel.style.height = '18px';
-imgExcel.alt = 'Exportar';
-btnExcel.appendChild(imgExcel);
-document.getElementById('btn-excel').appendChild(btnExcel);
-
-renderTabla();
-cargarFiltros();
-</script>
+<script src="../js/reportes_page.js"></script>
 <script src="../js/navbar.js"></script>
 <script>
+  try {
+    if (typeof initReportesPage === 'function') {
+      initReportesPage();
+    }
+  } catch (error) {
+    console.error('No se pudo inicializar la pantalla de reportes', error);
+  }
   cargarUsuario('reportes');
 </script>
 

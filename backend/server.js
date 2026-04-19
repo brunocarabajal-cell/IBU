@@ -208,11 +208,11 @@ function getProrrogaMotivos() {
 }
 
 function canCreateProrroga(user) {
-  return ['Administrativo', 'Administrativo Predio'].includes(user?.perfil);
+  return ['Administrativo', 'Administrativo Predio', 'Analista de AAFF'].includes(user?.perfil);
 }
 
 function canApproveGerencia(user) {
-  return user?.perfil === 'Gerencia';
+  return user?.perfil === 'Gerencia' || isActivosFijos(user);
 }
 
 function canApproveAaff(user) {
@@ -221,18 +221,6 @@ function canApproveAaff(user) {
 
 function isProrrogaClosed(row) {
   return ['Aprobada', 'Rechazada', 'Cancelada'].includes(row?.estado);
-}
-
-function canCancelProrroga(user, row) {
-  if (!user || user.invalid || !row || isProrrogaClosed(row)) {
-    return false;
-  }
-
-  if (isActivosFijos(user)) {
-    return true;
-  }
-
-  return Number(user.legajo) === Number(row.solicitante_legajo);
 }
 
 function buildProrrogaStages(row) {
@@ -316,8 +304,7 @@ function mapProrrogaRow(row, requester) {
     etapas: buildProrrogaStages(row),
     permisos: {
       puedeAprobar: canApprove,
-      puedeRechazar: canReject,
-      puedeCancelar: canCancelProrroga(requester, row)
+      puedeRechazar: canReject
     }
   };
 }
@@ -713,6 +700,8 @@ app.get('/prorrogas', (req, res) => {
     if (req.query.estado) {
       conditions.push('estado = ?');
       params.push(req.query.estado);
+    } else {
+      conditions.push(`estado IN ('Pendiente Gerencia', 'Pendiente AAFF')`);
     }
 
     applyLocationVisibility(conditions, params, requester, 'ubicacion');
@@ -1016,55 +1005,6 @@ app.put('/prorrogas/:id/rechazar', (req, res) => {
       }
 
       res.status(403).json({ error: 'No tenés permisos para rechazar esta solicitud en la etapa actual' });
-    });
-  });
-});
-
-app.put('/prorrogas/:id/cancelar', (req, res) => {
-  getRequesterUser(req, (userErr, requester) => {
-    if (userErr) {
-      return res.status(500).json({ error: 'Error al resolver el usuario actual' });
-    }
-
-    const conditions = ['id = ?'];
-    const params = [req.params.id];
-    applyLocationVisibility(conditions, params, requester, 'ubicacion');
-
-    db.get(`
-      SELECT *
-      FROM prorroga_solicitudes
-      ${buildWhereClause(conditions)}
-    `, params, (rowErr, row) => {
-      if (rowErr) {
-        return res.status(500).json({ error: 'Error al obtener la solicitud a cancelar' });
-      }
-
-      if (!row) {
-        return res.status(404).json({ error: 'Solicitud no encontrada' });
-      }
-
-      if (!canCancelProrroga(requester, row)) {
-        return res.status(403).json({ error: 'No tenés permisos para cancelar esta solicitud' });
-      }
-
-      const observacion = req.body?.observacion || '';
-      db.run(`
-        UPDATE prorroga_solicitudes
-        SET estado = 'Cancelada',
-            etapa_actual = 'Finalizada',
-            aaff_observacion = CASE
-              WHEN ? <> '' AND aaff_observacion IS NULL THEN ?
-              ELSE aaff_observacion
-            END,
-            updated_at = datetime('now')
-        WHERE id = ?
-      `, [observacion, observacion, row.id], function(updateErr) {
-        if (updateErr) {
-          return res.status(500).json({ error: 'Error al cancelar la solicitud' });
-        }
-
-        res.json({ ok: true });
-      });
     });
   });
 });
