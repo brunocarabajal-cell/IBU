@@ -16,7 +16,36 @@ function cerrarSesion() {
   window.location.href = 'Login.html';
 }
 
+function getThemeMode() {
+  try {
+    return localStorage.getItem('ibu_theme') === 'dark' ? 'dark' : 'light';
+  } catch (error) {
+    return 'light';
+  }
+}
+
+function applyThemeMode(mode) {
+  document.body.classList.toggle('ibu-dark', mode === 'dark');
+}
+
+function toggleThemeMode() {
+  const nextMode = getThemeMode() === 'dark' ? 'light' : 'dark';
+  try {
+    localStorage.setItem('ibu_theme', nextMode);
+  } catch (error) {
+    console.warn('No se pudo guardar la preferencia de tema');
+  }
+
+  applyThemeMode(nextMode);
+  window.dispatchEvent(new Event('resize'));
+  const switchInput = document.getElementById('theme-switch');
+  if (switchInput) {
+    switchInput.checked = nextMode === 'dark';
+  }
+}
+
 async function cargarUsuario(active) {
+  applyThemeMode(getThemeMode());
   const storedUser = getSessionUser();
   let resolvedUser = storedUser;
 
@@ -84,6 +113,10 @@ function renderNavbar(active, user) {
           <div style="font-size:12px;opacity:0.7;">${user.legajo}</div>
         </div>
         <div class="nav-user-actions">
+          <label class="theme-switch" title="Modo nocturno" aria-label="Modo nocturno">
+            <input id="theme-switch" type="checkbox" ${getThemeMode() === 'dark' ? 'checked' : ''} onchange="toggleThemeMode()">
+            <span class="theme-slider"></span>
+          </label>
           <button class="logout-btn" onclick="cerrarSesion()" aria-label="Cerrar sesión" title="Cerrar sesión">↪</button>
         </div>
       </div>

@@ -369,7 +369,7 @@
 
   <section class="stats-grid">
     <article class="stat-card" onclick="goReportes()">
-      <div class="stat-label">Reportes pendientes</div>
+      <div class="stat-label">Inventarios Pendientes</div>
       <div class="stat-value" id="metricPendientes">-</div>
       <div class="stat-note">Reportes que todavía requieren seguimiento operativo.</div>
     </article>
@@ -379,12 +379,12 @@
       <div class="stat-note">Casos con extensión marcada en la base inicial.</div>
     </article>
     <article class="stat-card" onclick="goReportes()">
-      <div class="stat-label">Reportes completos</div>
+      <div class="stat-label">Inventarios Completos</div>
       <div class="stat-value" id="metricCompletos">-</div>
       <div class="stat-note">Inventarios cerrados y visibles en la consulta histórica.</div>
     </article>
     <article class="stat-card" onclick="goReportes()">
-      <div class="stat-label">Con diferencias</div>
+      <div class="stat-label">Inventarios con Diferencias</div>
       <div class="stat-value" id="metricDiferencias">-</div>
       <div class="stat-note">Reportes donde el físico no coincide con el teórico.</div>
     </article>
@@ -420,8 +420,8 @@
     <div class="panel">
       <div class="panel-header">
         <div>
-          <div class="panel-title">Últimos reportes cargados</div>
-          <div class="panel-subtitle">Muestra operativa de los registros más recientes para seguimiento rápido.</div>
+          <div class="panel-title">Ultimos Inventarios Conciliados</div>
+          <div class="panel-subtitle">Resumen de actividad correspondiente a inventarios</div>
         </div>
       </div>
       <div class="report-list" id="reportList">
@@ -488,6 +488,10 @@
       if (value > 0) return 'diff-pos';
       if (value < 0) return 'diff-neg';
       return 'diff-zero';
+    }
+
+    function isDarkMode() {
+      return document.body.classList.contains('ibu-dark');
     }
 
     function renderMetrics() {
@@ -603,9 +607,29 @@
       const padding = { top: 30, right: 24, bottom: 54, left: 46 };
       const chartWidth = width - padding.left - padding.right;
       const chartHeight = height - padding.top - padding.bottom;
+      const darkMode = isDarkMode();
+      const palette = darkMode ? {
+        background: '#0f172b',
+        grid: '#24314f',
+        baseline: '#4b5f91',
+        line: '#6f86ff',
+        point: '#6f86ff',
+        axis: '#b8c4ea',
+        period: '#d8e0ff',
+        empty: '#aeb8da'
+      } : {
+        background: '#FFFFFF',
+        grid: '#E4E9F4',
+        baseline: '#BAC3E6',
+        line: '#3D4CFA',
+        point: '#3D4CFA',
+        axis: '#5C6382',
+        period: '#5C6382',
+        empty: '#6F7694'
+      };
 
       if (serie.length === 0) {
-        ctx.fillStyle = '#6F7694';
+        ctx.fillStyle = palette.empty;
         ctx.font = '14px Lato, sans-serif';
         ctx.fillText('Sin actividad mensual para graficar.', 24, 44);
         return;
@@ -616,10 +640,10 @@
       const stepX = serie.length > 1 ? chartWidth / (serie.length - 1) : 0;
       const baseY = getY(0, scale, chartHeight, padding.top);
 
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = palette.background;
       ctx.fillRect(0, 0, width, height);
 
-      ctx.strokeStyle = '#E4E9F4';
+      ctx.strokeStyle = palette.grid;
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (chartHeight / 4) * i;
@@ -632,7 +656,7 @@
       ctx.beginPath();
       ctx.moveTo(padding.left, baseY);
       ctx.lineTo(width - padding.right, baseY);
-      ctx.strokeStyle = '#BAC3E6';
+      ctx.strokeStyle = palette.baseline;
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
@@ -643,7 +667,7 @@
         if (index === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       });
-      ctx.strokeStyle = '#3D4CFA';
+      ctx.strokeStyle = palette.line;
       ctx.lineWidth = 3;
       ctx.stroke();
 
@@ -651,7 +675,7 @@
         const x = padding.left + stepX * index;
         const currentValue = Number(item.total) || 0;
         const y = getY(currentValue, scale, chartHeight, padding.top);
-        const pointColor = '#3D4CFA';
+        const pointColor = palette.point;
         const valueColor = currentValue >= 0 ? '#2E7D32' : '#C62828';
         const labelY = currentValue >= 0 ? y - 12 : y + 20;
 
@@ -665,13 +689,13 @@
         ctx.textAlign = 'center';
         ctx.fillText(currentValue, x, labelY);
 
-        ctx.fillStyle = '#5C6382';
+        ctx.fillStyle = palette.period;
         ctx.font = '12px Lato, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(formatPeriodo(item.periodo), x, height - 18);
       });
 
-      ctx.fillStyle = '#5C6382';
+      ctx.fillStyle = palette.axis;
       ctx.font = '11px Lato, sans-serif';
       ctx.textAlign = 'right';
       for (let i = 0; i <= 4; i++) {

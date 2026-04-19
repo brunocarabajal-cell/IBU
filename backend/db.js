@@ -2,9 +2,33 @@ const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
-const db = new sqlite3.Database('./database.sqlite');
+const dbPath = process.env.DB_PATH || path.join(__dirname, 'database.sqlite');
+const db = new sqlite3.Database(dbPath);
 const inventorySeedPath = path.join(__dirname, 'data', 'inventarios_seed.json');
 const usersSeedPath = path.join(__dirname, 'data', 'usuarios_seed.json');
+
+function ensureColumnExists(tableName, columnName, definition, callback) {
+  db.all(`PRAGMA table_info(${tableName})`, [], (err, rows) => {
+    if (err) {
+      console.error(`Error al verificar la columna ${columnName} en ${tableName}`, err);
+      callback?.();
+      return;
+    }
+
+    const exists = rows.some(row => row.name === columnName);
+    if (exists) {
+      callback?.();
+      return;
+    }
+
+    db.run(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`, alterErr => {
+      if (alterErr) {
+        console.error(`Error al agregar la columna ${columnName} en ${tableName}`, alterErr);
+      }
+      callback?.();
+    });
+  });
+}
 
 function seedProrrogasIfNeeded() {
   db.get(`SELECT COUNT(*) AS total FROM prorroga_solicitudes`, [], (countErr, row) => {
@@ -142,11 +166,12 @@ function seedInventoriesIfNeeded() {
         gerente_asignado,
         observacion_parte,
         numero_baja,
+        numero_alta,
         administrativo,
         participante_1,
         participante_2,
         gerente_firma
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     db.serialize(() => {
@@ -171,6 +196,7 @@ function seedInventoriesIfNeeded() {
           item.managerAssigned,
           item.note,
           item.dropNumber,
+          item.highNumber || item.raiseNumber || null,
           item.administrative,
           item.participant1,
           item.participant2,
@@ -334,6 +360,7 @@ db.serialize(() => {
       gerente_asignado TEXT,
       observacion_parte TEXT,
       numero_baja TEXT,
+      numero_alta TEXT,
       administrativo TEXT,
       participante_1 TEXT,
       participante_2 TEXT,
@@ -380,8 +407,10 @@ db.serialize(() => {
   db.run(`CREATE INDEX IF NOT EXISTS idx_prorrogas_estado ON prorroga_solicitudes(estado)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_prorrogas_ubicacion ON prorroga_solicitudes(ubicacion)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_prorrogas_inventario ON prorroga_solicitudes(numero_inventario)`, () => {
-    refreshUsersFromSeed();
-    seedInventoriesIfNeeded();
+    ensureColumnExists('inventario_detalles', 'numero_alta', 'TEXT', () => {
+      refreshUsersFromSeed();
+      seedInventoriesIfNeeded();
+    });
   });
 
 });

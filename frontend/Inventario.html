@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="ibu-api-base" content="">
 <title>IBU - Inventario</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/navbar.css">
@@ -12,130 +13,69 @@
 <link rel="stylesheet" href="../css/input_date_styles.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Lato',sans-serif}
-body{background:#F4F4F8;color:#1A1A2E; padding-bottom:50px;}
-.top-section{
-  padding:0 0 60px;
-  margin-top:-1px;
-}
-
-/* CREACION */
-.create-card{background:#fff;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
-.create-title{color:#4B4EFC;font-weight:700;font-size:16px}
-.create-line{height:2px;background:#4B4EFC;margin:12px 0 20px;width:100%}
-.create-form{
-  display:flex;
-  gap:20px;
-  align-items:stretch; /* 🔥 mejor alineación uniforme */
-  flex-wrap:wrap;
-  width:100%; /* 🔥 evita cortes raros */
-}
-.create-form .field{
-  display:flex;
-  flex-direction:column;
-  font-size:12px;
-  gap:4px;
-  flex:1;
-  min-width:180px;
-  justify-content:flex-start; /* 🔥 evita desplazamientos raros */
-}
-
-.create-form .field > *:last-child {
-  display:flex;
-  align-items:center;
-  height:40px;
-}
-
-#create-descripcion, #input-descripcion{
-  display:flex;
-  width:100%;
-}
-
-.create-form .field:first-child{
-  flex:2 1 300px; /* 🔥 más espacio y evita que quede sola */
-}
-.create-form input,
-.select-wrapper{
-  width:100%; /* 🔥 full width */
-}
-.create-form input{
-  padding:8px 12px;
-  border:1px solid #DADAE5;
-  border-radius:10px;
-  background:#fff;
-  height:40px; /* 🔥 altura unificada */
-}
-
-.select-selected{
-  height:40px !important; /* 🔥 igual que input */
-  padding:8px 12px !important;
-}
-
-input[type="date"]{
-  height:40px;
-}
-
-.create-btn{background:#2C3E6B;color:#fff;border:none;padding:10px 24px;border-radius:10px;cursor:pointer;font-weight:600;letter-spacing:0.3px}
-
-/* 🔥 Unificar altura de todos los controles */
-.input-base,
-.select-selected,
-input[type="date"] {
-  height: 40px !important;
-  padding: 8px 12px !important;
-  display: flex;
-  align-items: center;
-}
-
-/* asegurar que el wrapper del select no altere la altura */
-.select-wrapper {
-  height: 40px;
-}
-
-/* botón alineado a la misma altura */
-#btn-crear-container .btn-principal {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Prevent label misalignment */
-.create-form .field label{
-  height:16px;
-  display:flex;
-  align-items:center;
-}
-
-/* TABLA */
-.table-card{background:#DCDDE6;margin:30px;border-radius:16px;padding:24px 30px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+body{background:#F4F4F8;color:#1A1A2E;padding-bottom:50px}
+.page-shell{padding:30px}
+.card{background:#fff;border-radius:18px;padding:26px 30px;box-shadow:0 10px 30px rgba(31,40,88,0.08);margin-bottom:28px}
+.section-title{color:#4B4EFC;font-weight:700;font-size:16px}
+.section-subtitle{margin-top:8px;color:#667099;font-size:14px;line-height:1.4}
+.section-line{height:2px;background:#4B4EFC;margin:14px 0 22px;width:100%}
+.create-form{display:grid;grid-template-columns:2fr 1.1fr 1fr 0.9fr 1fr auto;gap:18px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px;font-size:12px}
+.field label{color:#4B4EFC;font-weight:700}
+.field .input-base,.field .select-wrapper,.field input[type="date"]{width:100%}
+.field .input-base,.field .select-selected,input[type="date"]{height:40px !important}
+.field-inline-end{display:flex;align-items:end;height:100%}
+#btn-crear-container{display:flex;justify-content:center}
+.helper-banner{margin-top:18px;padding:12px 16px;border-radius:12px;background:#F3F5FF;border:1px solid #D6DCFF;color:#44507F;font-size:14px}
+.helper-banner.hidden{display:none}
+.table-card{background:#DCDDE6}
 table{width:100%;border-collapse:collapse}
-th{color:#4B4EFC;font-size:13px;text-align:left;padding:12px;border-bottom:2px solid #4B4EFC}
-td{padding:12px;border-top:1px solid #E6E6EF;font-size:14px}
-.btn-ingresar{background:#2C3E6B;color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer}
-
-/* MODAL */
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;justify-content:center;align-items:center}
-.modal-content{background:#fff;width:80%;border-radius:16px;padding:24px 30px;box-shadow:0 20px 50px rgba(0,0,0,0.2)}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.close{cursor:pointer;font-weight:600}
-
-.negative{color:#E53935}
-.positive{color:#43A047}
-
-.input-gray{
-  background:#E6E6EF;
-  border:none;
-  padding:8px;
-  border-radius:8px;
+th{color:#4B4EFC;font-size:13px;text-align:left;padding:14px 12px;border-bottom:2px solid #4B4EFC}
+td{padding:14px 12px;border-top:1px solid #ECECF4;font-size:14px;vertical-align:top}
+.sortable-head{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:inherit;font:inherit;font-weight:700;cursor:pointer;padding:0}
+.sort-indicator{font-size:11px;opacity:.65;min-width:12px}
+.empty-row td{text-align:center;color:#6D7396;padding:28px 12px}
+.btn-ingresar{background:#2C3E6B;color:#fff;border:none;padding:8px 16px;border-radius:10px;cursor:pointer;font-weight:700}
+.status-pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border-radius:999px;font-weight:700;font-size:13px}
+.status-pending{background:#FFF0D9;color:#A66700}
+.status-expired{background:#FFE0DE;color:#B3261E}
+.modal{position:fixed;inset:0;background:rgba(19,24,50,0.35);display:none;justify-content:center;align-items:center;padding:24px;z-index:200}
+.modal-content{background:#fff;width:min(1280px,100%);max-height:92vh;overflow:auto;border-radius:20px;padding:26px 30px;box-shadow:0 24px 60px rgba(20,24,54,0.25)}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px}
+.modal-meta{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:12px;flex:1}
+.meta-card{padding:12px 14px;border-radius:14px;background:#F6F7FE;border:1px solid #DCE1FF}
+.meta-card b{display:block;color:#4B4EFC;font-size:12px;margin-bottom:6px}
+.modal-close{background:#EEF1FF;border:none;border-radius:12px;width:40px;height:40px;cursor:pointer;color:#2C3E6B;font-weight:700}
+.detail-table-wrap{border:1px solid #E1E5F8;border-radius:16px;overflow:auto}
+.detail-table th{white-space:nowrap}
+.table-input{width:100%;border:1px solid #D9DEEF;border-radius:10px;padding:8px 10px;background:#fff;color:#1A1A2E}
+.table-input-num{text-align:center}
+.diff-value{text-align:center;font-weight:700}
+.diff-pos{color:#2E7D32}
+.diff-neg{color:#C62828}
+.signatures{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:18px;margin-top:22px}
+.signature-field{display:flex;flex-direction:column;gap:8px;font-size:12px}
+.signature-field label{color:#4B4EFC;font-weight:700}
+.signature-field input{border:1px solid #D9DEEF;border-radius:12px;padding:10px 12px;height:42px}
+.modal-actions{display:flex;justify-content:center;gap:18px;margin-top:24px}
+.secondary-btn,.primary-btn{border:none;border-radius:12px;padding:12px 22px;cursor:pointer;font-weight:700}
+.secondary-btn{background:#EEF1FF;color:#2C3E6B}
+.primary-btn{background:#2C3E6B;color:#fff}
+.danger-btn{background:#FCE8E6;color:#B3261E}
+.secondary-btn:disabled,.primary-btn:disabled,.danger-btn:disabled{opacity:.45;cursor:not-allowed}
+.footer-line{height:40px;background:#303D9F;width:100%;position:fixed;bottom:0;left:0}
+@media (max-width: 1160px){
+  .create-form{grid-template-columns:repeat(2,minmax(220px,1fr))}
+  .field-inline-end{grid-column:1/-1;justify-content:center}
+  .modal-meta{grid-template-columns:repeat(2,minmax(180px,1fr))}
+  .signatures{grid-template-columns:repeat(2,minmax(180px,1fr))}
 }
-
-.footer-line{
-  height:40px;
-  background:#303D9F;
-  width:100%;
-  position:fixed;
-  bottom:0;
-  left:0;
+@media (max-width: 720px){
+  .page-shell{padding:18px}
+  .card{padding:20px}
+  .create-form,.modal-meta,.signatures{grid-template-columns:1fr}
+  .modal-content{padding:22px 18px}
+  .modal-actions{flex-direction:column}
 }
 </style>
 </head>
@@ -143,276 +83,142 @@ td{padding:12px;border-top:1px solid #E6E6EF;font-size:14px}
 
 <div id="navbar-container"></div>
 
-<div class="create-card">
-  <div class="create-title">Creación</div>
-  <div class="create-line"></div>
-<div class="create-form">
-    <div class="field">
-      <label>Descripción</label>
-      <div id="input-descripcion"></div>
+<div class="page-shell">
+  <div class="card">
+    <div class="section-title">Creación</div>
+    <div class="section-line"></div>
+
+    <div class="create-form">
+      <div class="field">
+        <label>Descripción</label>
+        <div id="input-descripcion"></div>
+      </div>
+
+      <div class="field">
+        <label>Ubicación</label>
+        <div id="select-ubicacion"></div>
+      </div>
+
+      <div class="field">
+        <label>Tipo</label>
+        <div id="select-tipo"></div>
+      </div>
+
+      <div class="field">
+        <label>Cantidad de Clases</label>
+        <div id="input-clases"></div>
+      </div>
+
+      <div class="field">
+        <label>Fecha</label>
+        <div id="input-fecha"></div>
+      </div>
+
+      <div class="field-inline-end">
+        <div id="btn-crear-container"></div>
+      </div>
     </div>
 
-    <div class="field">
-      <label>Ubicación</label>
-      <div id="select-ubicacion"></div>
-    </div>
-
-    <div class="field">
-      <label>Tipo</label>
-      <div id="select-tipo"></div>
-    </div>
-
-    <div class="field">
-      <label>Nº Clases</label>
-      <div id="select-clases"></div>
-    </div>
-
-    <div class="field">
-      <label>Fecha</label>
-      <div id="input-fecha"></div>
-    </div>
-
-    <div id="btn-crear-container" style="display:flex;align-items:center;margin-left:auto;margin-top:15px;"></div>
+    <div id="inventario-helper" class="helper-banner hidden"></div>
   </div>
-</div>
 
-<div class="table-card">
-<table id="tabla">
-<thead>
-<tr>
-<th>Nº Inventario</th>
-<th>Fecha <span style="font-size:10px;opacity:0.6;">▼</span></th>
-<th>Dias</th>
-<th>Descripción</th>
-<th>Tipo <span style="font-size:10px;opacity:0.6;">▼</span></th>
-<th>Ubicación <span style="font-size:10px;opacity:0.6;">▼</span></th>
-<th>Cant. Clases</th>
-<th>Estado <span style="font-size:10px;opacity:0.6;">▼</span></th>
-<th>Acción</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
+  <div class="card table-card">
+    <div class="section-title">Inventarios Pendientes</div>
+    <div class="section-line"></div>
+
+    <table id="tabla">
+      <thead>
+        <tr>
+          <th><button class="sortable-head" onclick="ordenarInventarios('numeroInventario','number')">N° Inventario <span class="sort-indicator" id="sort-numeroInventario">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('fechaInventario','date')">Fecha <span class="sort-indicator" id="sort-fechaInventario">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('dias','number')">Días <span class="sort-indicator" id="sort-dias">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('descripcion','text')">Descripción <span class="sort-indicator" id="sort-descripcion">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('tipo','text')">Tipo <span class="sort-indicator" id="sort-tipo">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('ubicacion','text')">Ubicación <span class="sort-indicator" id="sort-ubicacion">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('cantidadClases','number')">Cant. Clases <span class="sort-indicator" id="sort-cantidadClases">↕</span></button></th>
+          <th><button class="sortable-head" onclick="ordenarInventarios('estado','text')">Estado <span class="sort-indicator" id="sort-estado">↕</span></button></th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="empty-row"><td colspan="9">Cargando inventarios pendientes...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="modal" id="modal">
   <div class="modal-content">
-
     <div class="modal-header">
-      <div style="display:flex;gap:30px;font-size:14px;">
-        <div><b>Fecha:</b> 20/11/2025</div>
-        <div><b>N° Inventario:</b> 1</div>
-        <div><b>Descripción:</b> Inv. General Noviembre</div>
+      <div class="modal-meta">
+        <div class="meta-card"><b>Fecha</b><span id="modal-fecha">-</span></div>
+        <div class="meta-card"><b>N° Inventario</b><span id="modal-numero">-</span></div>
+        <div class="meta-card"><b>Descripción</b><span id="modal-descripcion">-</span></div>
+        <div class="meta-card"><b>Ubicación</b><span id="modal-ubicacion">-</span></div>
+        <div class="meta-card"><b>Tipo</b><span id="modal-tipo">-</span></div>
       </div>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <button style="background:#E6E6EF;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;">Cancelar Inventario</button>
-        <span class="close" onclick="cerrar()">X</span>
-      </div>
+      <button class="modal-close" onclick="cerrarInventarioModal()" aria-label="Cerrar">X</button>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>N° Clase</th>
-          <th>Descripción</th>
-          <th>Teórico</th>
-          <th>Físico Apto</th>
-          <th>Físico No Apto</th>
-          <th>Diferencia</th>
-          <th>N° Baja</th>
-          <th>N° Alta</th>
-          <th>Observaciones</th>
-        </tr>
-      </thead>
-      <tbody id="detalleBody"></tbody>
-    </table>
+    <div class="detail-table-wrap">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>N° Clase</th>
+            <th>Descripción</th>
+            <th>Teórico</th>
+            <th>Físico Apto</th>
+            <th>Físico No Apto</th>
+            <th>Diferencia</th>
+            <th>N° Baja</th>
+            <th>N° Alta</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody id="detalleBody"></tbody>
+      </table>
+    </div>
 
-    <div style="display:flex;justify-content:space-between;margin-top:20px;">
-      <div style="display:flex;flex-direction:column;gap:10px;width:45%;">
-        <label>Gerente / Resp a Cargo</label>
-        <input class="input-gray">
-        <label>Participante</label>
-        <input class="input-gray">
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:10px;width:45%;">
+    <div class="signatures">
+      <div class="signature-field">
         <label>Administrativo</label>
-        <input class="input-gray">
-        <label>Participante</label>
-        <input class="input-gray">
+        <input id="firma-administrativo">
+      </div>
+      <div class="signature-field">
+        <label>Participante 1</label>
+        <input id="firma-p1">
+      </div>
+      <div class="signature-field">
+        <label>Participante 2</label>
+        <input id="firma-p2">
+      </div>
+      <div class="signature-field">
+        <label>Gerencia</label>
+        <input id="firma-gerencia">
       </div>
     </div>
 
-    <div style="display:flex;justify-content:center;gap:20px;margin-top:20px;">
-      <button style="background:#6C5CE7;color:#fff;border:none;padding:10px 20px;border-radius:10px;">Guardar Borrador</button>
-      <button style="background:#2C3E6B;color:#fff;border:none;padding:10px 20px;border-radius:10px;">Conciliar</button>
+    <div class="modal-actions">
+      <button id="btn-cancelar-inventario" class="secondary-btn danger-btn" onclick="persistirInventario('cancelar')">Cancelar inventario</button>
+      <button class="secondary-btn" onclick="persistirInventario('guardar')">Guardar borrador</button>
+      <button id="btn-finalizar-inventario" class="primary-btn" onclick="persistirInventario('finalizar')">Finalizar inventario</button>
     </div>
-
   </div>
 </div>
 
-<script>
-function goInicio(){
-  window.location.href = "dashboard.html";
-}
-function goProrrogas(){
-  window.location.href = "Prorrogas.html";
-}
-function goUsuarios(){
-  window.location.href = "usuarios.html";
-}
-function goReportes(){
-  window.location.href = "reportes.html";
-}
-const data=[
-{n:1,fecha:'20/11/2025',dias:20,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'007',clases:6},
-{n:2,fecha:'21/11/2025',dias:1,desc:'Inventario PDA',tipo:'Inventario Parcial',ubi:'007',clases:2},
-{n:4,fecha:'20/11/2025',dias:2,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'131',clases:6},
-{n:87,fecha:'20/11/1996',dias:56,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'171',clases:3},
-{n:9,fecha:'20/11/1996',dias:78,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'242',clases:5},
-{n:123,fecha:'20/11/1996',dias:52,desc:'Inv. General Noviembre',tipo:'Inventario General',ubi:'026',clases:2}
-];
-
-function render(){
-const tbody=document.querySelector('#tabla tbody');
-tbody.innerHTML='';
-data.forEach(d=>{
-const tr=document.createElement('tr');
-tr.innerHTML=`<td>${d.n}</td><td>${d.fecha}</td><td>${d.dias}</td><td>${d.desc}</td><td>${d.tipo}</td><td>${d.ubi}</td><td>${d.clases}</td><td>Pendiente</td><td><button class="btn-ingresar" onclick="abrir()">Ingresar</button></td>`;
-tbody.appendChild(tr);
-});
-}
-
-function crear(){
-data.push({n:data.length+1,fecha: fechaValor || 'Hoy',dias:0,desc: descripcionValor,tipo:'General',ubi:'007',clases:1});
-render();
-}
-
-const detalleData=[
-{clase:1,desc:'Changos',teo:300},
-{clase:2,desc:'Monitor',teo:50},
-{clase:3,desc:'PDA',teo:20},
-{clase:65,desc:'Teclados',teo:10},
-{clase:78,desc:'Notebook',teo:2},
-{clase:85,desc:'Celular',teo:5}
-];
-
-function renderDetalle(){
-  const tbody=document.getElementById('detalleBody');
-  tbody.innerHTML='';
-
-  detalleData.forEach((d,i)=>{
-    const tr=document.createElement('tr');
-
-    tr.innerHTML=`
-      <td>${d.clase}</td>
-      <td>${d.desc}</td>
-      <td><input class="input-gray" type="number" oninput="calcular(${i})" id="teo${i}" value="${d.teo}"></td>
-      <td><input class="input-gray" type="number" oninput="calcular(${i})" id="apto${i}"></td>
-      <td><input class="input-gray" type="number" oninput="calcular(${i})" id="noapto${i}"></td>
-      <td id="dif${i}">0</td>
-      <td><input class="input-gray"></td>
-      <td><input class="input-gray"></td>
-      <td><input class="input-gray"></td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-}
-
-function calcular(i){
-  const apto=parseInt(document.getElementById(`apto${i}`).value)||0;
-  const noapto=parseInt(document.getElementById(`noapto${i}`).value)||0;
-  const teo=parseInt(document.getElementById(`teo${i}`).value)||0;
-
-  const diff=(apto+noapto)-teo;
-
-  const cell=document.getElementById(`dif${i}`);
-  cell.innerText=diff;
-
-  cell.className='';
-  if(diff>0) cell.classList.add('positive');
-  if(diff<0) cell.classList.add('negative');
-}
-
-function abrir(){
-  document.getElementById('modal').style.display='flex';
-  renderDetalle();
-}
-function cerrar(){document.getElementById('modal').style.display='none'}
-
-render();
-</script>
-
 <div class="footer-line"></div>
+
+<script src="../js/config.js"></script>
 <script src="../js/button_principal.js"></script>
 <script src="../js/select.js"></script>
 <script src="../js/select_mult.js"></script>
 <script src="../js/input_text.js"></script>
 <script src="../js/input_date.js"></script>
+<script src="../js/inventario_page.js"></script>
 <script src="../js/navbar.js"></script>
 <script>
   cargarUsuario('inventario');
-</script>
-<script>
-  const contenedorBtn = document.getElementById('btn-crear-container');
-
-  const botonCrear = crearBotonPrincipal({
-    texto: 'Crear',
-    onClick: crear,
-    size: 'lg'
-  });
-
-  contenedorBtn.appendChild(botonCrear);
-</script>
-
-<script>
-  // 🎯 Inicializar selects personalizados
-  const selectUbicacion = select_mult('#select-ubicacion', {
-    options: ['007','131','171','242','026'],
-    placeholder: 'Seleccionar',
-    multiple: true
-  });
-
-  const selectTipo = crearDesplegable({
-    opciones: ['Inventario General','Inventario Parcial'],
-    placeholder: 'Seleccionar',
-    multiple: false
-  });
-
-  document.getElementById('select-tipo').appendChild(selectTipo);
-
-  const selectClases = select_mult('#select-clases', {
-    options: ['1','2','3'],
-    placeholder: 'Seleccionar',
-    multiple: true
-  });
-</script>
-<script>
-  // 🎯 Inicializar input reutilizable
-  let descripcionValor = '';
-
-  const inputDescripcion = crearInput({
-    placeholder: 'Valor',
-    onChange: (val) => {
-      descripcionValor = val;
-    }
-  });
-
-  document.getElementById('input-descripcion').appendChild(inputDescripcion);
-</script>
-<script>
-  // 🎯 Inicializar input fecha reutilizable
-  let fechaValor = '';
-
-  const inputFecha = crearInputDate({
-    value: '',
-    onChange: (val) => {
-      fechaValor = val;
-    }
-  });
-
-  document.getElementById('input-fecha').appendChild(inputFecha);
+  initInventarioPage();
 </script>
 
 </body>

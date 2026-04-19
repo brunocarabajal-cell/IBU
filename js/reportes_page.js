@@ -197,7 +197,7 @@ async function exportCSV() {
         item.stockFisicosNoAptos,
         item.diferencia,
         item.numeroBaja || '',
-        '',
+        item.numeroAlta || '',
         item.observacion || '',
         detalleData.firmas.administrativo || '',
         detalleData.firmas.participante1 || '',
@@ -249,7 +249,7 @@ async function detalle(detalleId) {
         <td>${escapeHtml(item.stockFisicosNoAptos)}</td>
         <td class="${diffClass}">${escapeHtml(item.diferencia)}</td>
         <td>${escapeHtml(item.numeroBaja || '-')}</td>
-        <td>-</td>
+        <td>${escapeHtml(item.numeroAlta || '-')}</td>
         <td>${escapeHtml(item.observacion || '-')}</td>
       `;
       tbody.appendChild(tr);
@@ -304,7 +304,7 @@ function buildPrintHtml(data) {
       <td class="num">${escapeHtml(item.stockFisicosNoAptos)}</td>
       <td class="num ${Number(item.diferencia) > 0 ? 'diff-pos' : Number(item.diferencia) < 0 ? 'diff-neg' : ''}">${escapeHtml(item.diferencia)}</td>
       <td class="num">${escapeHtml(item.numeroBaja || '-')}</td>
-      <td class="num">-</td>
+      <td class="num">${escapeHtml(item.numeroAlta || '-')}</td>
       <td>${escapeHtml(item.observacion || '-')}</td>
     </tr>
   `).join('');
