@@ -365,10 +365,8 @@
     </div>
   </section>
 
-  <div class="loading" id="loading-text">Cargando resumen real de inventarios...</div>
-
   <section class="stats-grid">
-    <article class="stat-card" onclick="goReportes()">
+    <article class="stat-card" onclick="goInventario()">
       <div class="stat-label">Inventarios Pendientes</div>
       <div class="stat-value" id="metricPendientes">-</div>
       <div class="stat-note">Reportes que todavía requieren seguimiento operativo.</div>
@@ -706,7 +704,6 @@
     }
 
     async function loadDashboard() {
-      const loading = document.getElementById('loading-text');
       try {
         const res = await fetch(`${API_BASE}/dashboard/resumen`, {
           headers: authHeaders()
@@ -717,9 +714,8 @@
         renderMetrics();
         renderLatestReports();
         drawChart();
-        loading.innerText = 'Inicio actualizado con datos reales de la base de inventarios.';
       } catch (error) {
-        loading.innerText = 'No se pudo cargar el resumen del inicio. Verificá que el backend esté corriendo en el puerto 3000.';
+        console.warn('No se pudo cargar el resumen del inicio.');
       }
     }
 
